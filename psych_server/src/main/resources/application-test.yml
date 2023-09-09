@@ -1,0 +1,19 @@
+# 测试环境配置
+server:
+  port: 8088
+  context-path: /psych-server
+
+logging:
+  path: logs
+  config: classpath:logback-spring.xml
+
+spring:
+  aop:
+    proxy-target-class: true
+  resources:
+    static-locations: classpath:/static/
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/psych
+    username: root
+    password: 123456

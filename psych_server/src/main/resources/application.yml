@@ -1,0 +1,17 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: psych-server
+  # 所有环境通用的配置，放在这里
+  mvc:
+    throw-exception-if-no-handler-found: true
+
+mybatis-plus:
+  global-config:
+    banner: false
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:/com/psych/domain/**/mapper/*.xml
