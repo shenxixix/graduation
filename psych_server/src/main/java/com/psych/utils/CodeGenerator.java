@@ -1,6 +1,6 @@
 package com.psych.utils; /**
- * @author yanxiao
- * @date 2019/1/712:27
+ * @author shenxi
+ * @Date:2023/9/7
  * @Description: TODO
  */
 
@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * @Author:shenxi
  * @Des:
- * @Date:2019/1/7
+ * @Date:2023/9/7
  */
 public class CodeGenerator {
     /**
