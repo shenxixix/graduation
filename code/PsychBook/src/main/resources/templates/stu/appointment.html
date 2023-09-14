@@ -1,0 +1,421 @@
+﻿<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" class="no-js " lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
+
+    <title>预约医生</title>
+    <link rel="icon" th:href="@{/favicon.ico}" type="image/x-icon">
+    <!-- Favicon-->
+    <link rel="stylesheet" th:href="@{/assets/plugins/bootstrap/css/bootstrap.min.css}">
+    <!-- Dropzone Css -->
+    <link rel="stylesheet" th:href="@{/assets/plugins/dropzone/dropzone.css}">
+    <!-- Custom Css -->
+    <link rel="stylesheet" th:href="@{/assets/css/main.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/color_skins.css}">
+    <link rel="stylesheet" th:href="@{/assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css}">
+
+    <!--注意引入axios的cdn源-->
+    <script src="https://unpkg.zhimg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+    <script src="https://unpkg.zhimg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+
+    <style>
+        #upload_Img {
+            padding: 0px;
+            font-size: 14px;
+        }
+        #header_Padding{
+            padding: 10px;
+        }
+        .modal-backdrop.show {
+            opacity: .0;
+        }
+
+        .modal-backdrop{
+            z-index: 0;
+        }
+    </style>
+</head>
+
+<body class="theme-purple ls-toggle-menu">
+
+    <!-- Page Loader -->
+    <div th:replace="/basic/pageLoader :: pageLoader"></div>
+
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+
+    <!-- Top Bar -->
+    <div th:replace="/basic/topBar :: topBar"></div>
+
+    <!-- Left Sidebar -->
+    <div th:replace="/basic/leftBar :: leftBar"></div>
+
+    <!-- Right Sidebar -->
+    <div th:replace="/basic/rightBar :: rightBar"></div>
+
+
+    <section id="app" class="content">
+        <div class="block-header">
+            <div class="row">
+                <div class="col-lg-7 col-md-6 col-sm-12">
+                    <h2>&nbsp;</h2>
+                    <h2>预约时间</h2>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="container-fluid">
+
+                <!-- 封面 -->
+                <div id="upload_Padding" class="row clearfix">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+
+                        <div id="header_Padding" class="header">
+                            <h2><strong>基本信息</strong></h2>
+                            <div class="header">
+                                <h2><strong>您即将预约的医生</strong></h2>
+                            </div>
+                        </div>
+
+                        <div id="upload_Img" class="body">
+                            <div class="col-lg-4 col-md-4 col-sm-4">
+                                <span style="padding-left: 30px"><strong>{{doctor.name}}</strong></span>
+                            </div>
+                            <div class="col-lg-8 col-md-8 col-sm-8">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 标题 -->
+                <div class="row clearfix">
+                    <div class="col-lg-12 col-md-12 col-sm-12" style=" margin-left: 10px;">
+                        <div class="card">
+                            <div id="header_Padding" class="header">
+                                <div id="header_Padding" class="header">
+                                    <h2><strong>您希望预约的日期</strong></h2>
+                                </div>
+                            </div>
+                            <div class="col-lg-1 col-md-1 col-sm-1">
+                            </div>
+                            <div class="col-lg-10 col-md-10 col-sm-10">
+
+                                <!-- 添加日期 -->
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-neutral dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="zmdi zmdi-view-week"></i>
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right pullDown">
+                                            <!--遍历标签-->
+                                            <div v-for="date in dates">
+                                                <b-dropdown-item @click="dateSelect(date)">{{date}}</b-dropdown-item>
+                                            </div>
+                                        </ul>
+
+                                        <div v-show="isShow">
+                                            <a href="#" class="btn btn-raised btn-primary btn-simple btn-round">
+                                                {{dates2}}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                </div>
+                            </div>
+                            <div class="col-lg-1 col-md-1 col-sm-1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row clearfix">
+                    <div class="col-lg-12 col-md-12 col-sm-12" style=" margin-left: 10px;">
+                        <div class="card">
+                            <div id="header_Padding" class="header">
+                                <div id="header_Padding" class="header">
+                                    <h2><strong>您希望预约的时间段</strong></h2>
+                                </div>
+                            </div>
+                            <div class="col-lg-1 col-md-1 col-sm-1">
+                            </div>
+                            <div class="col-lg-10 col-md-10 col-sm-10">
+
+                                <!-- 添加时间段 -->
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-neutral dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="zmdi zmdi-time"></i>
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right pullDown">
+                                            <!--遍历时间段-->
+                                            <div v-for="time in times">
+                                                <b-dropdown-item @click="timeSelect(time)">{{time}}</b-dropdown-item>
+                                            </div>
+                                        </ul>
+
+                                        <div v-show="isShow2">
+                                            <a href="#" class="btn btn-raised btn-primary btn-simple btn-round">
+                                                {{times2}}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                </div>
+                            </div>
+                            <div class="col-lg-1 col-md-1 col-sm-1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--内容-->
+                <div class="row clearfix">
+                    <div class="col-lg-12 col-md-12 col-sm-12" style=" margin-left: 10px;">
+                        <div class="card">
+                            <div id="header_Padding" class="header">
+                                <div id="header_Padding" class="header">
+                                    <h2><strong>简述您最近的心理状态</strong></h2>
+                                </div>
+                            </div>
+                            <div class="col-lg-1 col-md-1 col-sm-1">
+                            </div>
+                            <div class="col-lg-10 col-md-10 col-sm-10">
+                                <input v-model="content" class="form-control" id="exampleInputEmail1" placeholder="请用一句话简单描述你的问题" name="content"
+                                       aria-describedby="emailHelp">
+                            </div>
+                            <div class="col-lg-1 col-md-1 col-sm-1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- 提交，删除 -->
+                <div id="upload_Padding" class="row clearfix">
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+
+                    </div>
+
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="card">
+                            <div class="header">
+                                <button type="submit" href="#" class="btn btn-raised btn-simple btn-round" value="submit" @click="submitFile">立即上传</button>
+                                &nbsp;
+                                <button type="submit" href="#" class="btn btn-raised btn-simple btn-round" value="delete" onclick="backurl()">放弃上传</button>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-4 col-sm-4">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Jquery Core Js -->
+    <script th:src="@{/assets/bundles/libscripts.bundle.js}"></script> <!-- Lib Scripts Plugin Js -->
+    <script th:src="@{/assets/bundles/vendorscripts.bundle.js}"></script> <!-- Lib Scripts Plugin Js -->
+
+    <script th:src="@{/assets/plugins/dropzone/dropzone.js}"></script> <!-- Dropzone Plugin Js -->
+
+    <script th:src="@{/assets/bundles/mainscripts.bundle.js}"></script><!-- Custom Js -->
+
+    <script th:inline="javascript">
+
+        var app = new Vue({
+            el:"#app",
+            data:{
+                title:'',
+                doctor:"",
+                doctor_id:[[${doctor.id}]],
+                content:"",
+                //注意vue中可以写thymeleaf的插值表达式
+                question_id:"",
+                student_id:[[${stuId}]],
+                label:"",
+                tags:[],
+                msg:"",
+                msg1:"",
+                show:true,
+                url:"",
+                //选中的标签的id
+                tagSelected:[],
+                //选中的标签的名字
+                tagNames:[],
+                dates:[],
+                dates2:"",
+                isShow: false,
+                times:[],
+                times2:"",
+                isShow2: false
+            },
+
+            //得到tags信息
+            created : async function () {
+                this.dates = [[${dates}]];
+                this.doctor = [[${doctor}]];
+                console.log(this.doctor_id);
+                console.log(this.student_id);
+                this.times = [[${times}]];
+                _this = this;
+                await axios.get("/mhealth/question/getTags").then(res => {
+                    _this.tags = res.data;
+                    console.log(_this.tags);
+                })
+            },
+
+            methods:{
+                getObjectURL (file) {
+                    let url = null ;
+                    if (window.createObjectURL!=undefined) { // basic
+                        url = window.createObjectURL(file) ;
+                    }else if (window.webkitURL!=undefined) { // webkit or chrome
+                        url = window.webkitURL.createObjectURL(file) ;
+                    }else if (window.URL!=undefined) { // mozilla(firefox)
+                        url = window.URL.createObjectURL(file) ;
+                    }
+                    alert(url)
+                    return url ;
+                },
+
+                //提交回答，并向后台发送问题id和医生id
+                submitFile: async function () {
+                        let formdata = new FormData();
+                        formdata.append("doctorId",this.doctor_id);
+                        formdata.append("dates2",this.dates2);
+                        console.log(this.dates2);
+                        formdata.append("times2",this.times2);
+                        console.log(this.times2);
+                        formdata.append("stuId",this.student_id);
+                        console.log(this.student_id);
+                        formdata.append("content",this.content);
+                        console.log(this.content);
+
+                        let config = {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        }
+
+                        //异步提交表单，即使有返回页面，也不会实现页面跳转
+                        try{
+                            await axios.post('/mhealth//stu/postAppointment',formdata,config).then(res => {
+                                alert("提交回答")
+                            })
+                        }catch (err){
+                            console.log(err)
+                        }
+
+                        location.href="/mhealth/stu/toMyAppointment";
+                },
+
+                //选定标签
+                tagSelect:function (t_id,tagName) {
+
+                    let flag = 1;
+                    //如果tagName存在，则不加入tagNames
+                    for(var i = 0; i < this.tagNames.length; ++i){
+                        if(this.tagNames[i] === tagName){
+                            flag = 0;
+                        }
+                    }
+
+                    if(flag == 1){
+                        this.tagSelected =  this.tagSelected.concat(t_id) ;
+                        this.tagNames = this.tagNames.concat(tagName);
+                    }
+                },
+                dateSelect:function (date) {
+
+
+                        this.dates2 = date;
+                        this.isShow = true;
+                        console.log(this.dates)
+                },
+                timeSelect:function (time) {
+
+
+                    this.times2 = time;
+                    this.isShow2 = true;
+                    console.log(this.dates)
+                },
+
+                del:function(index){
+                    this.tagNames.splice(index,1);
+                    this.tagSelected.splice(index,1);
+                },
+
+
+                //打开modal框
+                openModal:function () {
+                    this.show = true;
+                },
+
+                //创建label
+                createLabel: async function (){
+
+                    if(!$.isEmptyObject(this.label)){
+
+                        //检测该label名是否存在
+                        let temp  = "";
+                        try{
+                            await axios.get('/mhealth/question/getTagByName?tagName=' + _this.label).then(res=>{
+                                temp = res;
+                            })
+                        }catch(err){
+                            console.log(err);
+                        }
+
+                        if($.isEmptyObject(temp)){
+                            alert(temp);
+                            let formdata = new FormData();
+                            formdata.append("tagName",this.label);
+
+                            let config = {
+                                headers: {
+                                    'Content-Type': 'multipart/form-data'
+                                }
+                            }
+                            try{
+                                axios.post('/mheal/question/submitTag',formdata,config).then(res=>{
+                                        alert("提交标签");
+                                    }
+                                )
+                            }catch (err){
+                                console.log(err);
+                            }
+                            this.show = false;
+                            location.href = "/mhealth/doctor/toAnsPage?id=" + this.question_id;
+                        }else{
+                            this.msg = "标签名已存在"
+                        }
+                    }else{
+                        this.msg = "标签名不能为空"
+                    }
+                }
+            }
+        });
+        function backurl() {
+            self.location = document.referrer;
+
+        }
+
+    </script>
+</body>
+
+</html>
