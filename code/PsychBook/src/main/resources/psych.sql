@@ -333,6 +333,28 @@ insert  into `student`(`id`,`stu_number`,`name`,`gender`,`age`,`tel`,`email`,`pa
 (11,'04172079','test2',1,22,'15043912738','23456434@qq.com','test2',0,1615470501602,NULL),
 (12,'04172077','啦啦啦',1,22,'15043912738','lizhenfeng@didiglobal.com','123456',1,1616512595945,NULL);
 
+CREATE TABLE `patient` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '咨询者表id',
+  `stu_number` varchar(255) NOT NULL COMMENT '咨询者编号',
+  `name` varchar(255) NOT NULL COMMENT '咨询者名称',
+  `gender` int(11) DEFAULT '0' COMMENT '咨询者性别',
+  `age` int(20) DEFAULT NULL COMMENT '咨询者年龄',
+  `tel` varchar(255) DEFAULT NULL COMMENT '咨询者电话',
+  `email` varchar(255) NOT NULL COMMENT '咨询者邮箱',
+  `password` varchar(255) NOT NULL COMMENT '咨询者登录密码',
+  `state` tinyint(1) DEFAULT '0' COMMENT '咨询者在线状态',
+  `gmt_create` bigint(20) DEFAULT NULL COMMENT '创建时间',
+  `gmt_modified` bigint(20) DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+
+/*Data for the table `student` */
+
+insert  into `patient`(`id`,`stu_number`,`name`,`gender`,`age`,`tel`,`email`,`password`,`state`,`gmt_create`,`gmt_modified`) values
+(10,'04172078','test1',0,23,'15043912738','13467347324@qq.com','test1',0,1615443307173,NULL),
+(11,'04172079','test2',1,22,'15043912738','23456434@qq.com','test2',0,1615470501602,NULL),
+(12,'04172077','啦啦啦',1,22,'15043912738','lizhenfeng@didiglobal.com','123456',1,1616512595945,NULL);
+
 /*Table structure for table `tag` */
 
 DROP TABLE IF EXISTS `tag`;

@@ -1,7 +1,7 @@
 package com.shenxi.psych.service;
 
 import com.shenxi.psych.entity.Login;
-import com.shenxi.psych.entity.Student;
+import com.shenxi.psych.entity.Patient;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,7 +14,7 @@ public interface LoginService {
 
     String justLogin(Login login);
 
-    Login getLoginFromStu(Student student);
+    Login getLoginFromStu(Patient patient);
 
     String lkUseridByUsername(String username);
 

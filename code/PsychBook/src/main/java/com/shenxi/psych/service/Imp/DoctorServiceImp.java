@@ -3,13 +3,13 @@ package com.shenxi.psych.service.Imp;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.shenxi.psych.service.RedisService.UserRedisService;
 import com.shenxi.psych.entity.Appointment;
 import com.shenxi.psych.entity.Doctor;
-import com.shenxi.psych.entity.Student;
+import com.shenxi.psych.entity.Patient;
 import com.shenxi.psych.mapper.DoctorMapper;
-import com.shenxi.psych.mapper.StudentMapper;
+import com.shenxi.psych.mapper.PatientMapper;
 import com.shenxi.psych.service.DoctorService;
+import com.shenxi.psych.service.RedisService.UserRedisService;
 import com.shenxi.psych.utils.exception.CMSException;
 import com.shenxi.psych.utils.exception.ResultCodeEnum;
 import org.slf4j.Logger;
@@ -33,7 +33,7 @@ public class DoctorServiceImp implements DoctorService {
     private DoctorMapper doctorMapper;
 
     @Autowired
-    private StudentMapper studentMapper;
+    private PatientMapper patientMapper;
 
     @Autowired
     private UserRedisService userRedisService;
@@ -65,8 +65,8 @@ public class DoctorServiceImp implements DoctorService {
     }
 
     @Override
-    public List<Student> getStuState(boolean state) {
-        return studentMapper.getDoctorState(state);
+    public List<Patient> getStuState(boolean state) {
+        return patientMapper.getDoctorState(state);
     }
 
     @Override

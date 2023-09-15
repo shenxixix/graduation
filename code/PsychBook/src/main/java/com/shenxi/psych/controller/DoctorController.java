@@ -3,11 +3,10 @@ package com.shenxi.psych.controller;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.shenxi.psych.entity.*;
-import com.shenxi.psych.service.RedisService.UserRedisService;
-import com.shenxi.psych.entity.*;
 import com.shenxi.psych.service.DoctorService;
+import com.shenxi.psych.service.PatientService;
 import com.shenxi.psych.service.QuestionService;
-import com.shenxi.psych.service.StudentService;
+import com.shenxi.psych.service.RedisService.UserRedisService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +37,7 @@ public class DoctorController {
     private UserRedisService userRedisService;
 
     @Autowired
-    private StudentService studentService;
+    private PatientService patientService;
 
     @Autowired
     private QuestionService questionService;
@@ -116,10 +115,10 @@ public class DoctorController {
             logger.error("心理医生个人信息存入Redis失败");
         }
 
-        PageInfo<Student> studentPageInfo = studentService.getStuPage(pageNum,pageSize);
-        logger.info("首页心理医生列表分页->{}",JSON.toJSON(studentPageInfo));
+        PageInfo<Patient> patientPage = patientService.getPatientPage(pageNum,pageSize);
+        logger.info("首页心理医生列表分页->{}",JSON.toJSON(patientPage));
 
-        model.addAttribute("studentPageInfo",studentPageInfo);
+        model.addAttribute("studentPageInfo",patientPage);
 
         return "/doctor/home";
     }
@@ -155,7 +154,7 @@ public class DoctorController {
 
         //获取聊天咨询者id 和 图像编号
         String stuId = request.getParameter("studentId");
-        request.setAttribute("student",studentService.getStuById(Integer.valueOf(stuId)));
+        request.setAttribute("student", patientService.getStuById(Integer.valueOf(stuId)));
         request.setAttribute("iconNum",request.getParameter("iconNum"));
 
         return "/chat/chats";
@@ -228,7 +227,7 @@ public class DoctorController {
         }
 
         modelAndView.addObject("question",question);
-        modelAndView.addObject("student",question.getStudent());
+        modelAndView.addObject("patient",question.getPatient());
         modelAndView.addObject("questionCreateTime",questionCreateTime);
 
         modelAndView.addObject("askAndAns_s",answers);
@@ -250,8 +249,8 @@ public class DoctorController {
         String questionId = request.getParameter("question_id");
 
         String studentId = request.getParameter("student_id");
-        Student student = new Student();
-        student.setId(Integer.valueOf(studentId));
+        Patient patient = new Patient();
+        patient.setId(Integer.valueOf(studentId));
 
         Doctor doctor = (Doctor)request.getSession().getAttribute("doctor");
 
@@ -260,7 +259,7 @@ public class DoctorController {
         askAndAns.setAnswer(answer);
         askAndAns.setDoctor(doctor);
         askAndAns.setQuestId(Integer.valueOf(questionId));
-        askAndAns.setStudent(student);
+        askAndAns.setPatient(patient);
 
         //将该问题设置为已回答
         questionService.setQuesStatus(Integer.valueOf(questionId),System.currentTimeMillis());

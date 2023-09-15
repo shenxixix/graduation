@@ -31,7 +31,7 @@ public class Question {
 
     private Long gmtModified;
 
-    private Student student;
+    private Patient patient;
     private List<AskAndAnswer> askAndAnsList;
     private List<QuestionAndTag> questionAndTags;
 

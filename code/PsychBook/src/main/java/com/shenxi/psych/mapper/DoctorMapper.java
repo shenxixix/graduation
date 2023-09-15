@@ -52,7 +52,7 @@ public interface DoctorMapper {
     //根据questionId查询心理医生
     @Results({
             @Result(column = "id",property = "id"),
-            @Result(column = "stu_id",property = "student",one = @One(select = "com.shenxi.psych.mapper.StudentMapper.selectStuById",fetchType = FetchType.DEFAULT))
+            @Result(column = "stu_id",property = "patient",one = @One(select = "com.shenxi.psych.mapper.PatientMapper.selectPatientById",fetchType = FetchType.DEFAULT))
     })
     @Select("select * from appointment where doctor_id = #{doctorId} order by gmt_create DESC")
     List<Appointment> getMyAppointment(Integer doctorId);

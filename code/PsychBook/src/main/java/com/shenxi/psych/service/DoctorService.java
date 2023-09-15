@@ -3,7 +3,7 @@ package com.shenxi.psych.service;
 import com.github.pagehelper.PageInfo;
 import com.shenxi.psych.entity.Appointment;
 import com.shenxi.psych.entity.Doctor;
-import com.shenxi.psych.entity.Student;
+import com.shenxi.psych.entity.Patient;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public interface DoctorService {
 
     void insertDoctor(Doctor doctor);
 
-    List<Student> getStuState(boolean state);
+    List<Patient> getStuState(boolean state);
 
     Doctor doctorChecked(String doctorNumber,String password);
 

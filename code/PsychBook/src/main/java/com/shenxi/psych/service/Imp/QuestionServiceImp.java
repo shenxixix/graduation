@@ -4,11 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.shenxi.psych.entity.*;
-import com.shenxi.psych.service.RedisService.QuestRedisService;
-import com.shenxi.psych.entity.*;
 import com.shenxi.psych.mapper.QuestionMapper;
 import com.shenxi.psych.service.QuestionService;
-import com.shenxi.psych.service.StudentService;
+import com.shenxi.psych.service.RedisService.QuestRedisService;
+import com.shenxi.psych.service.PatientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,16 +39,16 @@ public class QuestionServiceImp implements QuestionService {
     QuestRedisService questRedisService;
 
     @Autowired
-    StudentService studentService;
+    PatientService patientService;
 
     //更新数据库中问题的数目，不必每次都到数据库中查找问题数目
     private static Integer count;
 
 
     @Override
-    public List<Question> getQuestionByStu(Student student) {
+    public List<Question> getQuestionByStu(Patient patient) {
         List<Question> questions = new ArrayList<>();
-        List<Integer> questionsId = questionMapper.getQuestionByStuId(student.getId());
+        List<Integer> questionsId = questionMapper.getQuestionByStuId(patient.getId());
         logger.info("questionsId is ->{}", JSON.toJSON(questionsId));
         for(Integer id : questionsId){
             Question question = questionMapper.getQuestionByIdV2(id);
@@ -61,7 +60,7 @@ public class QuestionServiceImp implements QuestionService {
 
     @Transactional
     @Override
-    public void insertQues(Question question, Student student) {
+    public void insertQues(Question question, Patient patient) {
 
         question.setGmtCreate(System.currentTimeMillis());
         question.setGmtModified(System.currentTimeMillis());
@@ -74,7 +73,7 @@ public class QuestionServiceImp implements QuestionService {
 
         //插入中间表
         long createTime = System.currentTimeMillis();
-        questionMapper.insertQuesWithStu(questionId,student.getId(),createTime);
+        questionMapper.insertQuesWithStu(questionId,patient.getId(),createTime);
 
         //检查dateList中是否有该日期
         List<Long> dateList = questRedisService.getDateList();

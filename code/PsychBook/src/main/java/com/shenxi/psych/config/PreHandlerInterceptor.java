@@ -2,7 +2,7 @@ package com.shenxi.psych.config;
 
 import com.shenxi.psych.entity.Admin;
 import com.shenxi.psych.entity.Doctor;
-import com.shenxi.psych.entity.Student;
+import com.shenxi.psych.entity.Patient;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -22,14 +22,14 @@ public class PreHandlerInterceptor implements HandlerInterceptor {
         try {
             //统一拦截（查询当前session是否存在user）(这里user会在每次登陆成功后，写入session)
             //判断是否是咨询者
-            Student student = (Student) request.getSession().getAttribute("student");
+            Patient patient = (Patient) request.getSession().getAttribute("patient");
             //判断是否是心理医生
             Doctor doctor = (Doctor) request.getSession().getAttribute("doctor");
             //判断是否是管理员
             Admin admin = (Admin) request.getSession().getAttribute("admin");
 
 //            String user=(String) request.getSession().getAttribute("userid");
-            if(student != null || doctor != null || admin != null){
+            if(patient != null || doctor != null || admin != null){
                 return true;
             }
             //重定向到咨询者登录页面

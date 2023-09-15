@@ -1,8 +1,8 @@
 package com.shenxi.psych.config;
 
 import com.shenxi.psych.entity.Doctor;
+import com.shenxi.psych.entity.Patient;
 import com.shenxi.psych.entity.Question;
-import com.shenxi.psych.entity.Student;
 import com.shenxi.psych.entity.Tag;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
@@ -36,8 +36,8 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, Student> studentRedisTemplate(RedisConnectionFactory factory) {
-        RedisTemplate<String, Student> template = new RedisTemplate<String, Student>();
+    public RedisTemplate<String, Patient> studentRedisTemplate(RedisConnectionFactory factory) {
+        RedisTemplate<String, Patient> template = new RedisTemplate<String, Patient>();
         template.setConnectionFactory(factory);
         // key采用String的序列化方式
         template.setKeySerializer(new StringRedisSerializer());

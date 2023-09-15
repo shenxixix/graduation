@@ -2,7 +2,6 @@ package com.shenxi.psych.service;
 
 import com.github.pagehelper.PageInfo;
 import com.shenxi.psych.entity.*;
-import com.shenxi.psych.entity.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,9 +13,9 @@ import java.util.List;
  */
 @Service
 public interface QuestionService {
-    List<Question> getQuestionByStu(Student student);
+    List<Question> getQuestionByStu(Patient patient);
 
-    void insertQues(Question question, Student student);
+    void insertQues(Question question, Patient patient);
 
     List<String> getDates();
 

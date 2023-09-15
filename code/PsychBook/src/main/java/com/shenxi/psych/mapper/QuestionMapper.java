@@ -29,7 +29,7 @@ public interface QuestionMapper {
      */
     @Results({
             @Result(column = "id",property = "id"),
-            @Result(column = "id",property = "student",one = @One(select = "com.shenxi.psych.mapper.StudentMapper.getStuByQuesId",fetchType= FetchType.DEFAULT)),
+            @Result(column = "id",property = "patient",one = @One(select = "com.shenxi.psych.mapper.PatientMapper.getStuByQuesId",fetchType= FetchType.DEFAULT)),
             @Result(column = "id",property = "askAndAnsList",many = @Many(select = "com.shenxi.psych.mapper.QuestionMapper.getAskAndAns",fetchType=FetchType.DEFAULT)),
             @Result(column = "id",property = "questionAndTags",many = @Many(select = "com.shenxi.psych.mapper.QuestionMapper.getQuestionAndTagByQid",fetchType=FetchType.DEFAULT)),
     })
@@ -78,7 +78,7 @@ public interface QuestionMapper {
 
     @Results({
             @Result(column = "id",property = "id"),
-            @Result(column = "id",property = "student",one = @One(select = "com.shenxi.psych.mapper.StudentMapper.getStuByQuesId",fetchType= FetchType.DEFAULT)),
+            @Result(column = "id",property = "patient",one = @One(select = "com.shenxi.psych.mapper.PatientMapper.getStuByQuesId",fetchType= FetchType.DEFAULT)),
             @Result(column = "id",property = "askAndAnsList",many = @Many(select = "com.shenxi.psych.mapper.QuestionMapper.getAskAndAns",fetchType=FetchType.DEFAULT)),
             @Result(column = "id",property = "questionAndTags",many = @Many(select = "com.shenxi.psych.mapper.QuestionMapper.getQuestionAndTagByQid",fetchType=FetchType.DEFAULT)),
     })
@@ -93,7 +93,7 @@ public interface QuestionMapper {
 
     @Results({
             @Result(column = "id",property = "id"),
-            @Result(column = "id",property = "student",one = @One(select = "com.shenxi.psych.mapper.StudentMapper.getStuByQuesId",fetchType= FetchType.DEFAULT)),
+            @Result(column = "id",property = "patient",one = @One(select = "com.shenxi.psych.mapper.PatientMapper.getStuByQuesId",fetchType= FetchType.DEFAULT)),
             @Result(column = "id",property = "askAndAnsList",many = @Many(select = "com.shenxi.psych.mapper.QuestionMapper.getAskAndAns",fetchType=FetchType.DEFAULT)),
             @Result(column = "id",property = "questionAndTags",many = @Many(select = "com.shenxi.psych.mapper.QuestionMapper.getQuestionAndTagByQid",fetchType=FetchType.DEFAULT)),
     })
@@ -111,7 +111,7 @@ public interface QuestionMapper {
     void updateAskAndAns(AskAndAnswer askAndAns);
 
     //如果该问题在中间表存在，但doctor_id不空，则插入到中间表
-    @Insert("insert into ask_and_answer (quest_id, stu_id, doctor_id, answer,gmt_create, gmt_modified) values (#{questId}, #{student.id}, #{doctor.id}, #{answer},#{gmtCreate}, #{gmtModified})")
+    @Insert("insert into ask_and_answer (quest_id, stu_id, doctor_id, answer,gmt_create, gmt_modified) values (#{questId}, #{patient.id}, #{doctor.id}, #{answer},#{gmtCreate}, #{gmtModified})")
     void insertAskAndAns(AskAndAnswer askAndAns);
 
     @Insert("insert into questions_and_tags(quest_id, tag_id) values (#{questId}, #{tagId})")
@@ -119,7 +119,7 @@ public interface QuestionMapper {
 
     @Results({
             @Result(column = "id",property = "id"),
-            @Result(column = "id",property = "student",one = @One(select = "com.shenxi.psych.mapper.StudentMapper.getStuByQuesId",fetchType= FetchType.DEFAULT)),
+            @Result(column = "id",property = "patient",one = @One(select = "com.shenxi.psych.mapper.PatientMapper.getStuByQuesId",fetchType= FetchType.DEFAULT)),
             @Result(column = "id",property = "askAndAnsList",many = @Many(select = "com.shenxi.psych.mapper.QuestionMapper.getAskAndAns",fetchType=FetchType.DEFAULT)),
             @Result(column = "id",property = "questionAndTags",many = @Many(select = "com.shenxi.psych.mapper.QuestionMapper.getQuestionAndTagByQid",fetchType=FetchType.DEFAULT)),
     })

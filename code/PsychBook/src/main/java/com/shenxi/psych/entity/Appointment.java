@@ -24,5 +24,5 @@ public class Appointment {
     private Long gmtCreate;
 
     private Doctor doctor;
-    private Student student;
+    private Patient patient;
 }

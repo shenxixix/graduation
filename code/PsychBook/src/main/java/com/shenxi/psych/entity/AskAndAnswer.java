@@ -16,7 +16,7 @@ public class AskAndAnswer {
     private Integer id;
     private Integer questId;
     private Doctor doctor;
-    private Student student;
+    private Patient patient;
     private String answer;
     private Long gmtCreate;
 

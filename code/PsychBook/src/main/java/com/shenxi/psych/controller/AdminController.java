@@ -3,11 +3,10 @@ package com.shenxi.psych.controller;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.shenxi.psych.entity.*;
-import com.shenxi.psych.entity.*;
 import com.shenxi.psych.service.AdminService;
 import com.shenxi.psych.service.DoctorService;
 import com.shenxi.psych.service.ResourcesService;
-import com.shenxi.psych.service.StudentService;
+import com.shenxi.psych.service.PatientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +35,7 @@ public class AdminController {
     ResourcesService resourcesService;
 
     @Autowired
-    StudentService studentService;
+    PatientService patientService;
 
     @Autowired
     DoctorService doctorService;
@@ -84,7 +83,7 @@ public class AdminController {
     public String toUserManager(@RequestParam(required = false,defaultValue = "1") Integer pageNum,
                                 @RequestParam(defaultValue = "4",value = "pageSize") Integer pageSize, Model model){
 
-        PageInfo<Student> students = studentService.getAllStudent(pageNum, pageSize);
+        PageInfo<Patient> students = patientService.getAllPatient(pageNum, pageSize);
         PageInfo<Doctor> doctors = doctorService.getAllDoctor(pageNum, pageSize);
         PageInfo<Admin> admins = adminService.getAllAdmin(pageNum, pageSize);
 
@@ -97,9 +96,9 @@ public class AdminController {
     @GetMapping("/admin/findStuPage")
     public String stuPage(@RequestParam(required = false,defaultValue = "1") Integer pageNum,
                           @RequestParam(defaultValue = "4",value = "pageSize") Integer pageSize,Model model){
-        PageInfo<Student> allStudent = studentService.getAllStudent(pageNum, pageSize);
-        logger.info("分页查找->{}",JSON.toJSON(allStudent));
-        model.addAttribute("stuPageInfo",allStudent);
+        PageInfo<Patient> allPatient = patientService.getAllPatient(pageNum, pageSize);
+        logger.info("分页查找->{}",JSON.toJSON(allPatient));
+        model.addAttribute("stuPageInfo",allPatient);
         return "/admin/stuPage";
     }
 
@@ -205,7 +204,7 @@ public class AdminController {
 
     @GetMapping(value = "/admin/delectStudent/{studentId}")
     public String delectStudent(@PathVariable Integer studentId){
-        studentService.deleteStudentById(studentId);
+        patientService.deleteStudentById(studentId);
         return "redirect:/admin/toUserManager";
     }
 

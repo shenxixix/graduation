@@ -1,7 +1,7 @@
 package com.shenxi.psych.service.Imp;
 
 import com.shenxi.psych.entity.Login;
-import com.shenxi.psych.entity.Student;
+import com.shenxi.psych.entity.Patient;
 import com.shenxi.psych.mapper.LoginMapper;
 import com.shenxi.psych.service.LoginService;
 import com.shenxi.psych.utils.Md5Util;
@@ -29,11 +29,11 @@ public class LoginServiceImp implements LoginService {
     }
 
     @Override
-    public Login getLoginFromStu(Student student) {
+    public Login getLoginFromStu(Patient patient) {
         Login login = new Login();
-        login.setAccountId(student.getId());
-        login.setAccountName(student.getName());
-        login.setPassword(Md5Util.StringInMd5(student.getPassword()));
+        login.setAccountId(patient.getId());
+        login.setAccountName(patient.getName());
+        login.setPassword(Md5Util.StringInMd5(patient.getPassword()));
         return login;
     }
 

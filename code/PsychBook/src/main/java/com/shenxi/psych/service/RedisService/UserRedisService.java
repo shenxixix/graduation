@@ -2,7 +2,7 @@ package com.shenxi.psych.service.RedisService;
 
 import com.alibaba.fastjson.JSON;
 import com.shenxi.psych.entity.Doctor;
-import com.shenxi.psych.entity.Student;
+import com.shenxi.psych.entity.Patient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,16 +26,16 @@ public class UserRedisService {
     private StringRedisTemplate redisUserTemplate; //聊天信息进redis缓存
 
     @Autowired
-    private RedisTemplate<String,Student> studentRedisTemplate;//将Student在线信息存入redis
+    private RedisTemplate<String,Patient> patientRedisTemplate;//将Student在线信息存入redis
 
     @Autowired
     private RedisTemplate<String,Doctor> doctorRedisTemplate;//将Doctor在线信息存入redis
 
 
     //格式：user:stu,Student student
-    public void insertStu(Student student){
-        studentRedisTemplate.opsForList().leftPush("user:stu",student);
-        studentRedisTemplate.expire("user:stu",3, TimeUnit.HOURS);
+    public void insertStu(Patient student){
+        patientRedisTemplate.opsForList().leftPush("user:patient",student);
+        patientRedisTemplate.expire("user:patient",3, TimeUnit.HOURS);
     }
 
     //格式：user:doctor,Doctor doctor
@@ -44,16 +44,16 @@ public class UserRedisService {
         doctorRedisTemplate.expire("user:doctor",3, TimeUnit.HOURS);
     }
 
-    public void removeStudentByValue(Student student) {
-        studentRedisTemplate.opsForList().remove("user:stu",0,student);
-        List<Student> students = studentRedisTemplate.opsForList().range("user:stu", 0, -1);
+    public void removePatientByValue(Patient student) {
+        patientRedisTemplate.opsForList().remove("user:patient",0,student);
+        List<Patient> students = patientRedisTemplate.opsForList().range("user:patient", 0, -1);
         logger.info("删除Redis中在线状态后的list->{}",JSON.toJSON(students));
     }
 
     //检查该咨询者是否在线
-    public Boolean isStuExist(Student student){
+    public Boolean isStuExist(Patient student){
         logger.info("student is->{}",JSON.toJSON(student));
-        List<Student> students= studentRedisTemplate.opsForList().range("user:stu", 0, -1);
+        List<Patient> students= patientRedisTemplate.opsForList().range("user:patient", 0, -1);
         assert students != null : "stu_ids is null";
         return students.contains(student);
     }
@@ -73,8 +73,8 @@ public class UserRedisService {
         return doctors;
     }
 
-    public List<Student> getStudentsOnline() {
-        List<Student> students = studentRedisTemplate.opsForList().range("user:stu", 0, 1);
+    public List<Patient> getPatientsOnline() {
+        List<Patient> students = patientRedisTemplate.opsForList().range("user:patient", 0, 1);
         logger.info("所有在线咨询者列表->{}",JSON.toJSON(students));
         return students;
     }

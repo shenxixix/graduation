@@ -5,13 +5,12 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.shenxi.psych.entity.Appointment;
 import com.shenxi.psych.entity.Login;
-import com.shenxi.psych.entity.Student;
+import com.shenxi.psych.entity.Patient;
 import com.shenxi.psych.entity.UserInfo;
-import com.shenxi.psych.service.RedisService.UserRedisService;
-import com.shenxi.psych.entity.*;
 import com.shenxi.psych.mapper.LoginMapper;
-import com.shenxi.psych.mapper.StudentMapper;
-import com.shenxi.psych.service.StudentService;
+import com.shenxi.psych.mapper.PatientMapper;
+import com.shenxi.psych.service.RedisService.UserRedisService;
+import com.shenxi.psych.service.PatientService;
 import com.shenxi.psych.utils.Md5Util;
 import com.shenxi.psych.utils.exception.CMSException;
 import com.shenxi.psych.utils.exception.ResultCodeEnum;
@@ -29,12 +28,12 @@ import java.util.List;
  * @Version 1.0
  */
 @Service
-public class StudentServiceImp implements StudentService {
+public class StudentServiceImp implements PatientService {
 
     private final static Logger logger = LoggerFactory.getLogger(StudentServiceImp.class);
 
     @Autowired
-    StudentMapper studentMapper;
+    PatientMapper patientMapper;
 
     @Autowired
     LoginMapper loginMapper;
@@ -44,24 +43,24 @@ public class StudentServiceImp implements StudentService {
 
     @Transactional
     @Override
-    public int insertStudentAndLogin(Student student) {
-        studentMapper.insertStu(student);
+    public int insertPatientAndLogin(Patient patient) {
+        patientMapper.insertStu(patient);
 
-        String stuNumber = student.getStuNumber();
-        Integer accountId = studentMapper.selectIdByStuNumber(stuNumber);
+        String stuNumber = patient.getStuNumber();
+        Integer accountId = patientMapper.selectIdByStuNumber(stuNumber);
 
         //插入login
         Login login = new Login();
         login.setAccountId(accountId);
-        login.setAccountName(student.getName());
-        login.setPassword(Md5Util.StringInMd5(student.getPassword()));
+        login.setAccountName(patient.getName());
+        login.setPassword(Md5Util.StringInMd5(patient.getPassword()));
         login.setGmtCreate(System.currentTimeMillis());
         logger.info("login is->{}",JSON.toJSON(login));
         loginMapper.insertLogin(login);
 
         //插入userInfo
         UserInfo userinfo = new UserInfo();
-        userinfo.setNickName(student.getName());
+        userinfo.setNickName(patient.getName());
         userinfo.setUserId(accountId);
         userinfo.setGmtCreate(System.currentTimeMillis());
         logger.info("userinfo is->{}",JSON.toJSON(userinfo));
@@ -71,36 +70,36 @@ public class StudentServiceImp implements StudentService {
     }
 
     @Override
-    public Student stuChecked(String stuNumber, String password) {
-        Student student = studentMapper.selectStu(stuNumber,password);
-        logger.info("get student is->{}", JSON.toJSON(student));
-        return student;
+    public Patient stuChecked(String stuNumber, String password) {
+        Patient patient = patientMapper.selectPatient(stuNumber,password);
+        logger.info("get student is->{}", JSON.toJSON(patient));
+        return patient;
     }
 
     @Override
-    public Student getStuById(Integer id) {
-        return studentMapper.getStuById(id);
+    public Patient getStuById(Integer id) {
+        return patientMapper.getStuById(id);
     }
 
     @Override
-    public Student getStuByStuNumber(String stuNumber) {
-        Student student = studentMapper.selectStuByStuNumber(stuNumber);
-        logger.info("select student by id is ->{}",JSON.toJSON(student));
-        return student;
+    public Patient getStuByStuNumber(String stuNumber) {
+        Patient patient = patientMapper.selectStuByStuNumber(stuNumber);
+        logger.info("select student by id is ->{}",JSON.toJSON(patient));
+        return patient;
     }
 
     @Override
-    public Boolean updateStudentState(Boolean state,Student student) {
+    public Boolean updatePatientState(Boolean state, Patient patient) {
         //先删除Redis中的在线状态
         try{
-            userRedisService.removeStudentByValue(student);
+            userRedisService.removePatientByValue(patient);
         }catch (Exception e){
             throw new CMSException(ResultCodeEnum.UPDATE_STU_STATE_IN_REDIS);
         }
 
-        Integer id = student.getId();
+        Integer id = patient.getId();
         //再修改数据库中的状态为离线
-        Integer res = studentMapper.updateStudentState(state,id);
+        Integer res = patientMapper.updatePatientState(state,id);
         if (res == 0)
             throw new CMSException(ResultCodeEnum.UPDATE_STU_STATE_IN_DB);
         else
@@ -108,33 +107,33 @@ public class StudentServiceImp implements StudentService {
     }
 
     @Override
-    public Student getStuByQuestionId(Integer questionId) {
-        Integer stuId = studentMapper.getStuIdByQuestionId(questionId);
-        Student student = studentMapper.selectStuById(stuId);
-        return student;
+    public Patient getStuByQuestionId(Integer questionId) {
+        Integer stuId = patientMapper.getStuIdByQuestionId(questionId);
+        Patient patient = patientMapper.selectPatientById(stuId);
+        return patient;
     }
 
     @Override
-    public PageInfo<Student> getAllStudent(Integer pageNum, Integer pageSize) {
+    public PageInfo<Patient> getAllPatient(Integer pageNum, Integer pageSize) {
         //使用分页插件,核心代码就这一行
         PageHelper.startPage(pageNum, pageSize);
         // 获取
-        PageInfo<Student> pageInfo = getPageInfo(pageNum, pageSize);
+        PageInfo<Patient> pageInfo = getPageInfo(pageNum, pageSize);
         return pageInfo;
     }
 
     @Override
-    public PageInfo<Student> getStuPage(Integer pageNum, Integer pageSize) {
+    public PageInfo<Patient> getPatientPage(Integer pageNum, Integer pageSize) {
         //使用分页插件,核心代码就这一行
         PageHelper.startPage(pageNum, pageSize);
         // 获取
-        PageInfo<Student> pageInfo = getPageInfoV2(pageNum, pageSize);
+        PageInfo<Patient> pageInfo = getPageInfoV2(pageNum, pageSize);
         return pageInfo;
     }
 
     @Override
     public void insertAppointment(Appointment appointment) {
-        studentMapper.insertAppointment(appointment);
+        patientMapper.insertAppointment(appointment);
     }
 
     @Override
@@ -148,12 +147,12 @@ public class StudentServiceImp implements StudentService {
 
     @Override
     public void removeAppointmentByAppId(Integer appointmentId) {
-        studentMapper.removeAppointmentByAppId(appointmentId);
+        patientMapper.removeAppointmentByAppId(appointmentId);
     }
 
     @Override
     public void deleteStudentById(Integer studentId) {
-        studentMapper.deleteStudentById(studentId);
+        patientMapper.deletePatientById(studentId);
     }
 
     private PageInfo<Appointment> getPageInfoV3(Integer pageNum, Integer pageSize, Integer stuId) {
@@ -171,7 +170,7 @@ public class StudentServiceImp implements StudentService {
         PageHelper.startPage(pageNum, pageSize);
         //2.紧跟的查询就是一个分页查询-必须紧跟.后面的其他查询不会被分页，除非再次调用PageHelper.startPage
         try {
-            List<Appointment> appointments = studentMapper.getMyAppointment(stuId);
+            List<Appointment> appointments = patientMapper.getMyAppointment(stuId);
             PageInfo<Appointment> pageInfo = new PageInfo<>(appointments, pageSize);
             pageInfo.setList(appointments);
             return pageInfo;
@@ -184,7 +183,7 @@ public class StudentServiceImp implements StudentService {
 
     }
 
-    private PageInfo<Student> getPageInfoV2(Integer pageNum, Integer pageSize) {
+    private PageInfo<Patient> getPageInfoV2(Integer pageNum, Integer pageSize) {
         //判断非空
         if (pageNum == null) {
             pageNum = 1; //设置默认当前页
@@ -199,9 +198,9 @@ public class StudentServiceImp implements StudentService {
         PageHelper.startPage(pageNum, pageSize);
         //2.紧跟的查询就是一个分页查询-必须紧跟.后面的其他查询不会被分页，除非再次调用PageHelper.startPage
         try {
-            List<Student> students = studentMapper.getStuPage();
-            PageInfo<Student> pageInfo = new PageInfo<>(students, pageSize);
-            pageInfo.setList(students);
+            List<Patient> patients = patientMapper.getStuPage();
+            PageInfo<Patient> pageInfo = new PageInfo<>(patients, pageSize);
+            pageInfo.setList(patients);
             return pageInfo;
         } catch (Exception e) {
             e.printStackTrace();
@@ -211,7 +210,7 @@ public class StudentServiceImp implements StudentService {
         return null;
     }
 
-    private PageInfo<Student> getPageInfo(Integer pageNum, Integer pageSize) {
+    private PageInfo<Patient> getPageInfo(Integer pageNum, Integer pageSize) {
         //判断非空
         if (pageNum == null) {
             pageNum = 1; //设置默认当前页
@@ -226,9 +225,9 @@ public class StudentServiceImp implements StudentService {
         PageHelper.startPage(pageNum, pageSize);
         //2.紧跟的查询就是一个分页查询-必须紧跟.后面的其他查询不会被分页，除非再次调用PageHelper.startPage
         try {
-            List<Student> students = studentMapper.getAllStudent();
-            PageInfo<Student> pageInfo = new PageInfo<>(students, pageSize);
-            pageInfo.setList(students);
+            List<Patient> patients = patientMapper.getAllPatient();
+            PageInfo<Patient> pageInfo = new PageInfo<>(patients, pageSize);
+            pageInfo.setList(patients);
             return pageInfo;
         } catch (Exception e) {
             e.printStackTrace();

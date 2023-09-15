@@ -6,8 +6,6 @@ import com.github.pagehelper.PageInfo;
 import com.shenxi.psych.entity.*;
 import com.shenxi.psych.service.*;
 import com.shenxi.psych.service.RedisService.UserRedisService;
-import com.shenxi.psych.entity.*;
-import com.shenxi.psych.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +35,7 @@ public class StudentController {
     private LoginService loginService;
 
     @Autowired
-    private StudentService studentService;
+    private PatientService patientService;
 
     @Autowired
     private DoctorService doctorService;
@@ -76,18 +74,18 @@ public class StudentController {
 
     /**
      * 完成注册，跳转到登录页面
-     * @param student
+     * @param patient
      * @return
      */
     @PostMapping(value = "/stu/register")
     @ResponseBody
-    public void register(Student student){
-        logger.info("student->{}", JSON.toJSON(student));
+    public void register(Patient patient){
+        logger.info("student->{}", JSON.toJSON(patient));
 
-        student.setGmtCreate(System.currentTimeMillis());
+        patient.setGmtCreate(System.currentTimeMillis());
         try{
             //插入咨询者登录帐号和聊天帐号
-            int res = studentService.insertStudentAndLogin(student);
+            int res = patientService.insertPatientAndLogin(patient);
             if (res != 0){
                 logger.info("成功插入数据，res->{}",res);
             }
@@ -104,10 +102,10 @@ public class StudentController {
      */
     @GetMapping(value = "/stu/stuChecked1")
     @ResponseBody
-    public Student stuCheckedById(Student student){
-        logger.info("student's stuNumber is ->{}",student.getStuNumber());
-        String stuNumber = student.getStuNumber();
-        return studentService.getStuByStuNumber(stuNumber);
+    public Patient stuCheckedById(Patient patient){
+        logger.info("student's stuNumber is ->{}",patient.getStuNumber());
+        String stuNumber = patient.getStuNumber();
+        return patientService.getStuByStuNumber(stuNumber);
     }
 
     /**
@@ -116,10 +114,10 @@ public class StudentController {
      */
     @GetMapping(value = "/stu/stuChecked")
     @ResponseBody
-    public Student stuChecked(String stuNumber,String password){
+    public Patient stuChecked(String stuNumber,String password){
 
         logger.info("stuNumber->{},password->{}",stuNumber,password);
-        return studentService.stuChecked(stuNumber,password);
+        return patientService.stuChecked(stuNumber,password);
     }
 
     /**
@@ -132,7 +130,7 @@ public class StudentController {
                              @RequestParam(defaultValue = "4",value = "pageSize") Integer pageSize,
                              String stuNumber, HttpServletRequest request, Model model){
         logger.info("跳转到咨询者主页,student->{}",stuNumber);
-        Student student = studentService.getStuByStuNumber(stuNumber);
+        Patient student = patientService.getStuByStuNumber(stuNumber);
 
         //往session中存入咨询者聊天帐号
         Login login = loginService.getLoginFromStu(student);
@@ -143,8 +141,8 @@ public class StudentController {
         request.getSession().setAttribute("student",student);
         request.getSession().setAttribute("documents",documents);
 
-        studentService.updateStudentState(true,student);
-        student = studentService.getStuByStuNumber(stuNumber);
+        patientService.updatePatientState(true,student);
+        student = patientService.getStuByStuNumber(stuNumber);
 
         //个人信息注册到redis中
         try{
@@ -171,8 +169,8 @@ public class StudentController {
     @GetMapping(value = "/stu/return")
     public String returnPage(Integer id,HttpServletRequest request){
         logger.info("删除redis中咨询者在线状态id为->{}",id);
-        Student stu = studentService.getStuById(id);
-        Boolean state = studentService.updateStudentState(false,stu);
+        Patient stu = patientService.getStuById(id);
+        Boolean state = patientService.updatePatientState(false,stu);
         if (state){
             request.getSession().setAttribute("student",null);
             logger.info("咨询者注销成功！");
@@ -189,10 +187,10 @@ public class StudentController {
      */
     @GetMapping(value = "/stu/toQuesPage")
     public String toQuesPage(HttpServletRequest request){
-        Student student = (Student) request.getSession().getAttribute("student");
-        logger.info("student->{}",JSON.toJSON(student));
+        Patient patient = (Patient) request.getSession().getAttribute("student");
+        logger.info("student->{}",JSON.toJSON(patient));
 
-        List<Question> questions = questionService.getQuestionByStu(student);
+        List<Question> questions = questionService.getQuestionByStu(patient);
         request.setAttribute("questions",questions);
         logger.info("根据stuId查询出的question->{}",JSON.toJSON(questions));
         return "/stu/question";
@@ -207,9 +205,9 @@ public class StudentController {
     @PostMapping(value = "/stu/question")
     public String submitQuestion(Question question, HttpServletRequest request){
         logger.info("提交的问题->{}",JSON.toJSON(question));
-        Student student = (Student) request.getSession().getAttribute("student");
+        Patient patient = (Patient) request.getSession().getAttribute("student");
         try{
-            questionService.insertQues(question,student);
+            questionService.insertQues(question,patient);
         }catch (Exception e){
             logger.error("插入信息失败！");
             return "redirect:/error";
@@ -225,8 +223,8 @@ public class StudentController {
      */
     @GetMapping(value = "/stu/toAnsHood")
     public String toAnsHood(HttpServletRequest request){
-        Student student = (Student) request.getSession().getAttribute("student");
-        System.out.println("toAnsHood " + student);
+        Patient patient = (Patient) request.getSession().getAttribute("student");
+        System.out.println("toAnsHood " + patient);
         //问题日期
         List<String> dates = questionService. getDates();
         request.setAttribute("dates",dates);
@@ -274,7 +272,7 @@ public class StudentController {
 
         modelAndView.addObject("updateTime",createTime);
         modelAndView.addObject("question",question);
-        modelAndView.addObject("student",question.getStudent());
+        modelAndView.addObject("patient",question.getPatient());
 
         modelAndView.addObject("askAndAns_s",answers);
         modelAndView.addObject("questionAndTags",question.getQuestionAndTags());
@@ -313,7 +311,7 @@ public class StudentController {
      */
     @GetMapping(value = "/stu/toChatPage")
     public String toChatPage(HttpServletRequest request){
-        Student student = (Student) request.getSession().getAttribute("student");
+        Patient patient = (Patient) request.getSession().getAttribute("student");
 
         //获取聊天心理医生id 和 图像编号
         String doctorId = request.getParameter("doctorId");
@@ -322,7 +320,7 @@ public class StudentController {
         request.setAttribute("iconNum",request.getParameter("iconNum"));
 
         //得到咨询者和所有心理医生的聊天关系
-        List<Integer> chatFriendsId = chatFriendsService.getFriendsId(student.getId());
+        List<Integer> chatFriendsId = chatFriendsService.getFriendsId(patient.getId());
         //判断该心理医生是否和咨询者已经建立聊天关系
         for (Integer id :chatFriendsId) {
             if(id.equals(Integer.valueOf(doctorId))){
@@ -330,7 +328,7 @@ public class StudentController {
             }
         }
         //建立咨询者和心理医生之间的聊天关系
-        chatFriendsService.setChatFriends(student.getId(),Integer.valueOf(doctorId));
+        chatFriendsService.setChatFriends(patient.getId(),Integer.valueOf(doctorId));
 
         return "/chat/chats";
     }
@@ -379,7 +377,7 @@ public class StudentController {
         appointment.setGmtCreate(System.currentTimeMillis());
 
         try{
-            studentService.insertAppointment(appointment);
+            patientService.insertAppointment(appointment);
         }catch (Exception e){
             logger.info("插入预约表失败！");
             e.printStackTrace();
@@ -390,17 +388,17 @@ public class StudentController {
     @GetMapping(value = "/stu/toMyAppointment")
     public String toMyAppointment(@RequestParam(required = false,defaultValue = "1") Integer pageNum,
                                   @RequestParam(defaultValue = "5",value = "pageSize") Integer pageSize,Model model,HttpServletRequest request){
-        Student student = (Student) request.getSession().getAttribute("student");
-        logger.info("student->{}",JSON.toJSON(student));
+        Patient patient = (Patient) request.getSession().getAttribute("student");
+        logger.info("student->{}",JSON.toJSON(patient));
 
-        PageInfo<Appointment> myAppointments = studentService.getMyAppointment(pageNum, pageSize,student.getId());
+        PageInfo<Appointment> myAppointments = patientService.getMyAppointment(pageNum, pageSize,patient.getId());
         model.addAttribute("myAppointments",myAppointments);
         return "/stu/myAppointment";
     }
 
     @GetMapping(value = "/stu/removeAppointment")
     public String removeAppointment(Integer appointmentId){
-        studentService.removeAppointmentByAppId(appointmentId);
+        patientService.removeAppointmentByAppId(appointmentId);
         return "redirect:/stu/toMyAppointment";
     }
 

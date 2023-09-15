@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.shenxi.psych.entity.ChatFriends;
 import com.shenxi.psych.entity.ChatMessage;
 import com.shenxi.psych.entity.Doctor;
-import com.shenxi.psych.entity.Student;
+import com.shenxi.psych.entity.Patient;
 import com.shenxi.psych.service.ChatFriendsService;
 import com.shenxi.psych.service.ChatMessageService;
 import org.slf4j.Logger;
@@ -51,13 +51,13 @@ public class ChatController {
     @ResponseBody
     public List<ChatFriends> findUserFriends(HttpSession session){
         Doctor doctor = (Doctor) session.getAttribute("doctor");
-        Student student = (Student) session.getAttribute("student");
+        Patient patient = (Patient) session.getAttribute("patient");
         if (doctor != null){
             List<ChatFriends> allFriends = chatFriendsService.findUserAllFriends(doctor.getId());
             logger.info("doctor端聊天页面查找的所有好友->{}", JSON.toJSON(allFriends));
             return allFriends;
         }else {
-            List<ChatFriends> allFriends = chatFriendsService.findUserAllFriendsInStu(student.getId());
+            List<ChatFriends> allFriends = chatFriendsService.findUserAllFriendsInStu(patient.getId());
             logger.info("student端聊天页面查找的所有好友->{}", JSON.toJSON(allFriends));
             return allFriends;
         }
