@@ -6,7 +6,7 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>医生登录页</title>
+    <title>心理医生登录页</title>
     <!-- Favicon-->
     <link rel="icon" th:href="@{/favicon.ico}" type="image/x-icon">
     <!-- Custom Css -->
@@ -39,7 +39,7 @@
 <nav class="navbar navbar-expand-lg fixed-top navbar-transparent">
     <div class="container">
         <div class="navbar-translate n_logo">
-            <a class="navbar-brand" href="javascript:void(0);" title="" target="_blank"><h4>MHealth</h4></a>
+            <a class="navbar-brand" href="javascript:void(0);" title="" target="_blank"><h4>心语咨询</h4></a>
             <button class="navbar-toggler" type="button">
                 <span class="navbar-toggler-bar bar1"></span>
                 <span class="navbar-toggler-bar bar2"></span>
@@ -52,10 +52,10 @@
                     <h4></h4>
                     <a class="nav-link btn btn-white btn-round" th:href="@{/doctor/toRegister}" href="sign-up.html">注册</a>
                 </li>
-                <!--学生登录-->
+                <!--咨询者登录-->
                 <li class="nav-item">
                     <h4></h4>
-                    <a class="nav-link btn btn-white btn-round" th:href="@{/stu}" href="sign-up.html">学生入口</a>
+                    <a class="nav-link btn btn-white btn-round" th:href="@{/stu}" href="sign-up.html">咨询者入口</a>
                 </li>
                 <!--管理员登录-->
                 <li class="nav-item">
@@ -68,7 +68,7 @@
 </nav>
 <!-- End Navbar -->
 <div class="page-header">
-    <div class="page-header-image" style="background-image:url(/mhealth/assets/images/login.jpg)"></div>
+    <div class="page-header-image" style="background-image:url(/psych/assets/images/login.jpg)"></div>
     <div class="container">
         <div class="col-md-12 content-center">
             <div id="app" class="card-plain">
@@ -77,7 +77,7 @@
                         <div class="logo-container">
                             <img th:src="@{/assets/images/logo.svg}" src="assets/images/logo.svg" alt="">
                         </div>
-                        <h5>医生登录</h5>
+                        <h5>心理医生登录</h5>
                     </div>
                     <div class="content">
                         <div class="input-group input-lg">
@@ -116,7 +116,7 @@
                 <script>
                     document.write(new Date().getFullYear())
                 </script>,
-                <span><a href="#" target="_blank">网工1703魏佳</a>&nbsp设计</span>
+                <span><a href="#" target="_blank">沈希</a>&nbsp设计</span>
             </div>
         </div>
     </footer>
@@ -155,7 +155,7 @@
                     _this = this;
 
                     try{
-                         await axios.get("/mhealth/doctor/doctorChecked?doctorNumber="+this.doctorNumber +"&password="+this.password).
+                         await axios.get("/psych/doctor/doctorChecked?doctorNumber="+this.doctorNumber +"&password="+this.password).
                                     then(res => {
                                         //注意回调函数的this和vue的this会产生歧义
                                         _this.doctor = res.data;
@@ -169,7 +169,7 @@
                     if (!($.isEmptyObject(this.doctor))) {
                         this.content = ""
 
-                        location.href = "/mhealth/doctor/toHomePage?doctorNumber=" + this.doctorNumber
+                        location.href = "/psych/doctor/toHomePage?doctorNumber=" + this.doctorNumber
                     }else {
                         this.content = "用户名或密码错误"
                     }

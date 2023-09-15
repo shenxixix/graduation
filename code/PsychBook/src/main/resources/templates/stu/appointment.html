@@ -7,7 +7,7 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>预约医生</title>
+    <title>预约心理医生</title>
     <link rel="icon" th:href="@{/favicon.ico}" type="image/x-icon">
     <!-- Favicon-->
     <link rel="stylesheet" th:href="@{/assets/plugins/bootstrap/css/bootstrap.min.css}">
@@ -78,7 +78,7 @@
                         <div id="header_Padding" class="header">
                             <h2><strong>基本信息</strong></h2>
                             <div class="header">
-                                <h2><strong>您即将预约的医生</strong></h2>
+                                <h2><strong>您即将预约的心理医生</strong></h2>
                             </div>
                         </div>
 
@@ -273,7 +273,7 @@
                 console.log(this.student_id);
                 this.times = [[${times}]];
                 _this = this;
-                await axios.get("/mhealth/question/getTags").then(res => {
+                await axios.get("/psych/question/getTags").then(res => {
                     _this.tags = res.data;
                     console.log(_this.tags);
                 })
@@ -293,7 +293,7 @@
                     return url ;
                 },
 
-                //提交回答，并向后台发送问题id和医生id
+                //提交回答，并向后台发送问题id和心理医生id
                 submitFile: async function () {
                         let formdata = new FormData();
                         formdata.append("doctorId",this.doctor_id);
@@ -314,14 +314,14 @@
 
                         //异步提交表单，即使有返回页面，也不会实现页面跳转
                         try{
-                            await axios.post('/mhealth//stu/postAppointment',formdata,config).then(res => {
+                            await axios.post('/psych//stu/postAppointment',formdata,config).then(res => {
                                 alert("提交回答")
                             })
                         }catch (err){
                             console.log(err)
                         }
 
-                        location.href="/mhealth/stu/toMyAppointment";
+                        location.href="/psych/stu/toMyAppointment";
                 },
 
                 //选定标签
@@ -374,7 +374,7 @@
                         //检测该label名是否存在
                         let temp  = "";
                         try{
-                            await axios.get('/mhealth/question/getTagByName?tagName=' + _this.label).then(res=>{
+                            await axios.get('/psych/question/getTagByName?tagName=' + _this.label).then(res=>{
                                 temp = res;
                             })
                         }catch(err){
@@ -400,7 +400,7 @@
                                 console.log(err);
                             }
                             this.show = false;
-                            location.href = "/mhealth/doctor/toAnsPage?id=" + this.question_id;
+                            location.href = "/psych/doctor/toAnsPage?id=" + this.question_id;
                         }else{
                             this.msg = "标签名已存在"
                         }

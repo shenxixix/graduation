@@ -306,7 +306,7 @@
 
                 //跳转到查询问题页面
                 toViewPage : function (questionParam) {
-                    location.href="/mhealth/stu/toViewPage?id=" + questionParam.id;
+                    location.href="/psych/stu/toViewPage?id=" + questionParam.id;
                 },
 
                 dateSelect: async function (date) {
@@ -314,7 +314,7 @@
 
                     try{
                         _this = this;
-                        await axios.get("/mhealth/stu/getQuesByDate?dateTime=" + this.dateTime).then(res => {
+                        await axios.get("/psych/stu/getQuesByDate?dateTime=" + this.dateTime).then(res => {
                             _this.questions = res.data;
                             if(!$.isEmptyObject(_this.questions)){
                                 this.flag = false;
@@ -332,7 +332,7 @@
                     this.tagName = tag.tagName;
                     try{
                         _this = this;
-                        await axios.get("/mhealth/stu/getQuesByTag?tag=" + this.t_id).then(res => {
+                        await axios.get("/psych/stu/getQuesByTag?tag=" + this.t_id).then(res => {
                             _this.questions = res.data;
                             if(!$.isEmptyObject(_this.questions)){
                                 this.flag = false;
@@ -355,7 +355,7 @@
                     this.tagName = "焦虑"
                     try{
                         _this = this;
-                        await axios.get("/mhealth/stu/getQuesByTag?tag=1").then(res => {
+                        await axios.get("/psych/stu/getQuesByTag?tag=1").then(res => {
                             _this.questions = res.data;
                             if(!$.isEmptyObject(_this.questions)){
                                 this.flag = false;
@@ -388,7 +388,7 @@
                     let temp = [];
                     try{
                         _this = this;
-                        await axios.get("/mhealth/stu/getQuesByDate?dateTime=" + this.dateTime).then(res => {
+                        await axios.get("/psych/stu/getQuesByDate?dateTime=" + this.dateTime).then(res => {
                             _this.questions = res.data
                             if(!$.isEmptyObject(_this.questions)){
                                 this.flag = false;
@@ -411,7 +411,7 @@
                 try{
                     _this = this;
                     var temp = [];
-                    await axios.get("/mhealth/stu/getQuesByTag?tag=1").then(res => {
+                    await axios.get("/psych/stu/getQuesByTag?tag=1").then(res => {
 //                        _this.questions = res.data;
                         temp = res.data;
                         if(!$.isEmptyObject(temp)){

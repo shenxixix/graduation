@@ -422,7 +422,7 @@
         var jsonData = JSON.stringify(data); //根据数据生成json数据
         console.log(jsonData);
             $.ajax({
-                url: "/mhealth/stu/compute",
+                url: "/psych/stu/compute",
                 data: jsonData,
                 contentType: "application/json;charset=UTF-8", //发送数据的格式
                 type: "POST",
@@ -430,7 +430,7 @@
                 success: function(obj) {
                     console.log(obj);
                     if (obj !== 1) {
-                        window.location.href="/mhealth/stu/toPsychoTestV2?id="+obj;
+                        window.location.href="/psych/stu/toPsychoTestV2?id="+obj;
 
                     } else {
 
@@ -443,7 +443,7 @@
     })
     $("#xxcs").click(function(){
 
-        window.location.href="/mhealth/stu/toPsychoTest";
+        window.location.href="/psych/stu/toPsychoTest";
 
 
 

@@ -90,13 +90,13 @@
                             </span>
                         </div>
                         <ul class="nav nav-tabs p-l-0 p-r-0" role="tablist">
-                            <li class="nav-item inlineblock"><a class="nav-link active" data-toggle="tab" href="#people">学生</a></li>
+                            <li class="nav-item inlineblock"><a class="nav-link active" data-toggle="tab" href="#people">咨询者</a></li>
                         </ul>
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane slideRight active" id="people">
                                 <ul class="chat-list list-unstyled m-b-0">
 
-                                    <!--获取当前咨询的医生-->
+                                    <!--获取当前咨询的心理医生-->
                                     <li class="clearfix active">
                                         <img th:src="@{'/assets/images/xs/avatar' + ${iconNum} + '.jpg'}" alt="avatar" />
                                         <div class="about">
@@ -141,7 +141,7 @@
                         </div>
                         <div class="chat-history" style="height: 450px; overflow-x: auto;">
                             <ul v-for="perContent in contentList">
-                                <!--医生的发言-->
+                                <!--心理医生的发言-->
                                 <li v-if="perContent.from_id == 1" class="clearfix">
                                     <div class="message-data text-right">
                                         <span class="message-data-time">{{perContent.date}},{{perContent.time}}</span> &nbsp; &nbsp;
@@ -149,7 +149,7 @@
                                     </div>
                                     <div class="message other-message float-right" v-text="perContent.content"></div>
                                 </li>
-                                <!--学生的发言-->
+                                <!--咨询者的发言-->
                                 <li v-if="perContent.from_id == 0">
                                     <div class="message-data">
                                         <span class="message-data-name" v-text="perContent.student.username"><i class="zmdi zmdi-circle online"></i></span>
@@ -234,7 +234,7 @@
             this.d_id = [[${session.doctor.id}]]
             this.s_id = [[${student.id}]]
 
-            //获取在线学生
+            //获取在线咨询者
             try{
                 _this = this
 //                alert(_this.d_id)
@@ -247,7 +247,7 @@
                 console.log(err)
             }
 
-            //获取离线学生
+            //获取离线咨询者
             try{
                 _this = this
                 await axios.get("/mheal/doctor/getStudentsOffline",datatype="json").then(res => {
@@ -259,7 +259,7 @@
                 console.log(err)
             }
 
-            //获取学生和医生的聊天记录
+            //获取咨询者和心理医生的聊天记录
             try{
                 _this = this
                 alert(this.d_id)

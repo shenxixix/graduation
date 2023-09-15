@@ -39,7 +39,7 @@
 <nav class="navbar navbar-expand-lg fixed-top navbar-transparent">
     <div class="container">
         <div class="navbar-translate n_logo">
-            <a class="navbar-brand" href="javascript:void(0);" title="" target="_blank"><h4>MHealth</h4></a>
+            <a class="navbar-brand" href="javascript:void(0);" title="" target="_blank"><h4>心语咨询</h4></a>
             <button class="navbar-toggler" type="button">
                 <span class="navbar-toggler-bar bar1"></span>
                 <span class="navbar-toggler-bar bar2"></span>
@@ -48,15 +48,15 @@
         </div>
         <div class="navbar-collapse">
             <ul class="navbar-nav">
-                <!--学生登录-->
+                <!--咨询者登录-->
                 <li class="nav-item">
                     <h4></h4>
-                    <a class="nav-link btn btn-white btn-round" th:href="@{/stu}" href="sign-up.html">学生入口</a>
+                    <a class="nav-link btn btn-white btn-round" th:href="@{/stu}" href="sign-up.html">咨询者入口</a>
                 </li>
-                <!--医生登录-->
+                <!--心理医生登录-->
                 <li class="nav-item">
                     <h4></h4>
-                    <a class="nav-link btn btn-white btn-round" th:href="@{/doctor}" href="sign-up.html">医生入口</a>
+                    <a class="nav-link btn btn-white btn-round" th:href="@{/doctor}" href="sign-up.html">心理医生入口</a>
                 </li>
             </ul>
         </div>
@@ -64,7 +64,7 @@
 </nav>
 <!-- End Navbar -->
 <div class="page-header">
-    <div class="page-header-image" style="background-image:url(/mhealth/assets/images/login.jpg)"></div>
+    <div class="page-header-image" style="background-image:url(/psych/assets/images/login.jpg)"></div>
     <div class="container">
         <div class="col-md-12 content-center">
             <div id="app" class="card-plain">
@@ -112,7 +112,7 @@
                 <script>
                     document.write(new Date().getFullYear())
                 </script>,
-                <span><a href="#" target="_blank">网工1703魏佳</a>&nbsp设计</span>
+                <span><a href="#" target="_blank">沈希</a>&nbsp设计</span>
             </div>
         </div>
     </footer>
@@ -151,7 +151,7 @@
                     _this = this;
 
                     try{
-                         await axios.get("/mhealth/admin/adminChecked?name="+this.name +"&password="+this.password).
+                         await axios.get("/psych/admin/adminChecked?name="+this.name +"&password="+this.password).
                                     then(res => {
                                         //注意回调函数的this和vue的this会产生歧义
                                         _this.admin = res.data;
@@ -164,7 +164,7 @@
                     if (!($.isEmptyObject(this.admin))) {
                         this.content = ""
 
-                        location.href = "/mhealth/admin/toHomePage?name=" + this.name
+                        location.href = "/psych/admin/toHomePage?name=" + this.name
                     }else {
                         this.content = "用户名或密码错误"
                     }

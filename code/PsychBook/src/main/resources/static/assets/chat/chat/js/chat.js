@@ -280,7 +280,7 @@ var websocket = null;
 //判断当前浏览器是否支持WebSocket
 if ('WebSocket' in window) {
     //连接WebSocket节点
-    websocket = new WebSocket("ws://localhost:8080/mhealth/websocket/" + userid);
+    websocket = new WebSocket("ws://localhost:8080/psych/websocket/" + userid);
 } else {
     alert('Not support websocket')
 }

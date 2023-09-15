@@ -6,7 +6,7 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
 
-    <title>医生注册页面</title>
+    <title>心理医生注册页面</title>
     <!-- Favicon-->
     <link rel="icon" th:href="@{/favicon.ico}" type="image/x-icon">
     <!-- Custom Css -->
@@ -25,7 +25,7 @@
 <nav class="navbar navbar-expand-lg fixed-top navbar-transparent">
     <div class="container">        
         <div class="navbar-translate n_logo">
-            <a class="navbar-brand" href="javascript:void(0);" title="" target="_blank"><h4>MHealth</h4></a>
+            <a class="navbar-brand" href="javascript:void(0);" title="" target="_blank"><h4>心语咨询</h4></a>
             <button class="navbar-toggler" type="button">
                 <span class="navbar-toggler-bar bar1"></span>
                 <span class="navbar-toggler-bar bar2"></span>
@@ -44,7 +44,7 @@
 </nav>
 <!-- End Navbar -->
 <div class="page-header">
-    <div class="page-header-image" style="background-image:url(/mhealth/assets/images/login.jpg)"></div>
+    <div class="page-header-image" style="background-image:url(/psych/assets/images/login.jpg)"></div>
     <div class="container">
         <div class="col-md-12 content-center">
             <div id="signUp" class="card-plain">
@@ -53,7 +53,7 @@
                         <div class="logo-container">
                             <img th:src="@{/assets/images/logo.svg}" alt="">
                         </div>
-                        <h5>医生注册</h5>
+                        <h5>心理医生注册</h5>
                         <!-- <span>Register a new membership</span> -->
                     </div>
                     <div class="content">
@@ -152,7 +152,7 @@
                 <script>
                     document.write(new Date().getFullYear())
                 </script>,
-                <span><a href="#" target="_blank">网工1703魏佳</a>&nbsp设计</span>
+                <span><a href="#" target="_blank">沈希</a>&nbsp设计</span>
             </div>
         </div>
     </footer>
@@ -259,7 +259,7 @@
 
                     _this = this;
                     try{
-                        await axios.get("/mhealth/doctor/doctorChecked1?doctorNumber=" + this.doctorNumber)
+                        await axios.get("/psych/doctor/doctorChecked1?doctorNumber=" + this.doctorNumber)
                                        .then(res => {
                                            _this.doctor = res.data
                                        })
@@ -294,11 +294,11 @@
                         }
 
                         //异步提交表单，实现数据插入，即使有返回页面，也不会实现页面跳转
-                        axios.post('/mhealth/doctor/register',formdata,config).then(res => {
+                        axios.post('/psych/doctor/register',formdata,config).then(res => {
                             alert("提交表单")
                         })
 
-                        location.href="/mhealth/doctor";
+                        location.href="/psych/doctor";
                     }
                 }
             }

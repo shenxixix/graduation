@@ -1,7 +1,7 @@
 server:
   port: 8080
   servlet:
-    context-path: /mhealth
+    context-path: /psych
 
 spring:
   thymeleaf:
@@ -65,4 +65,4 @@ pagehelper:
 
 logging:
   level:
-    com.weijia.mhealth.mapper: debug
+    com.shenxi.psych.mapper: debug
