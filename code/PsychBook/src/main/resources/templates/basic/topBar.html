@@ -44,7 +44,7 @@
         <li>
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" th:if="${session.student} != null" th:href="@{/stu/toHomePage(stuNumber=${session.student.stuNumber})}" href="index.html"><img th:src="@{/assets/images/logo.svg}" src="/assets/images/logo.svg" width="30" alt="Oreo"><span class="m-l-10">心语咨询</span></a>
+                <a class="navbar-brand" th:if="${session.patient} != null" th:href="@{/stu/toHomePage(stuNumber=${session.patient.stuNumber})}" href="index.html"><img th:src="@{/assets/images/logo.svg}" src="/assets/images/logo.svg" width="30" alt="Oreo"><span class="m-l-10">心语咨询</span></a>
                 <a class="navbar-brand" th:if="${session.admin} != null" th:href="@{/admin/toHomePage(name=${session.admin.name})}" href="index.html"><img th:src="@{/assets/images/logo.svg}" src="/assets/images/logo.svg" width="30" alt="Oreo"><span class="m-l-10">心语咨询</span></a>
                 <a class="navbar-brand" th:if="${session.doctor} != null" th:href="@{/doctor/toHomePage(doctorNumber=${session.doctor.doctorNumber})}" href="index.html"><img th:src="@{/assets/images/logo.svg}" src="/assets/images/logo.svg" width="30" alt="Oreo"><span class="m-l-10">心语咨询</span></a>
             </div>
@@ -222,7 +222,8 @@
         </li>
         <li class="float-right">
             <a href="javascript:void(0);" class="fullscreen hidden-sm-down" data-provide="fullscreen" data-close="true"><i class="zmdi zmdi-fullscreen"></i></a>
-            <a th:if="${session.student != null}" th:href="@{/stu/return(id=${session.student.id})}" class="mega-menu" data-close="true"><i class="zmdi zmdi-power"></i></a>
+            <a th:if="${session.patient != null}" th:href="@{/stu/return(id=${session.patient.id})}" class="mega-menu" data-close="true"><i class="zmdi zmdi-power"></i></a>
+            <a th:if="${session.admin != null}" th:href="@{/admin/return(id=${session.admin.id})}" class="mega-menu" data-close="true"><i class="zmdi zmdi-power"></i></a>
             <a th:if="${session.doctor != null}" th:href="@{/doctor/return(id=${session.doctor.id})}" class="mega-menu" data-close="true"><i class="zmdi zmdi-power"></i></a>
             <a href="javascript:void(0);" class="js-right-sidebar" data-close="true"><i class="zmdi zmdi-settings zmdi-hc-spin"></i></a>
         </li>

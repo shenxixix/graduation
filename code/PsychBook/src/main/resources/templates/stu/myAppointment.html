@@ -94,7 +94,8 @@
                                     <tbody th:each="myAppointment:${myAppointments.list}">
                                         <tr>
                                             <td th:text="${myAppointmentStat.count}"></td>
-                                            <td th:text="${myAppointment.doctor.name}"></td>
+                                            <td th:if="${myAppointment.doctor != null}" th:text="${myAppointment.doctor.name}"></td>
+                                            <td th:if="${myAppointment.doctor == null}">无</td>
                                             <td th:text="${myAppointment.dates}"></td>
                                             <td th:text="${myAppointment.times}"></td>
                                             <td th:if="${myAppointment.state==0}">未审核</td>

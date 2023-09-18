@@ -27,9 +27,9 @@ import java.util.List;
  * @Version 1.0
  */
 @Controller
-public class StudentController {
+public class PatientController {
 
-    private final static Logger logger = LoggerFactory.getLogger(StudentController.class);
+    private final static Logger logger = LoggerFactory.getLogger(PatientController.class);
 
     @Autowired
     private LoginService loginService;
@@ -80,7 +80,7 @@ public class StudentController {
     @PostMapping(value = "/stu/register")
     @ResponseBody
     public void register(Patient patient){
-        logger.info("student->{}", JSON.toJSON(patient));
+        logger.info("patient->{}", JSON.toJSON(patient));
 
         patient.setGmtCreate(System.currentTimeMillis());
         try{
@@ -103,7 +103,7 @@ public class StudentController {
     @GetMapping(value = "/stu/stuChecked1")
     @ResponseBody
     public Patient stuCheckedById(Patient patient){
-        logger.info("student's stuNumber is ->{}",patient.getStuNumber());
+        logger.info("patient's stuNumber is ->{}",patient.getStuNumber());
         String stuNumber = patient.getStuNumber();
         return patientService.getStuByStuNumber(stuNumber);
     }
@@ -129,25 +129,25 @@ public class StudentController {
     public String toHomePage(@RequestParam(required = false,defaultValue = "1") Integer pageNum,
                              @RequestParam(defaultValue = "4",value = "pageSize") Integer pageSize,
                              String stuNumber, HttpServletRequest request, Model model){
-        logger.info("跳转到咨询者主页,student->{}",stuNumber);
-        Patient student = patientService.getStuByStuNumber(stuNumber);
+        logger.info("跳转到咨询者主页,patient->{}",stuNumber);
+        Patient patient = patientService.getStuByStuNumber(stuNumber);
 
         //往session中存入咨询者聊天帐号
-        Login login = loginService.getLoginFromStu(student);
+        Login login = loginService.getLoginFromStu(patient);
         logger.info("login from Stu->{}",JSON.toJSON(login) );
         String userid = loginService.justLogin(login);
         List<Document> documents = resourcesService.getAllDocument();
         request.getSession().setAttribute("userid",Integer.valueOf(userid));
-        request.getSession().setAttribute("student",student);
+        request.getSession().setAttribute("patient",patient);
         request.getSession().setAttribute("documents",documents);
 
-        patientService.updatePatientState(true,student);
-        student = patientService.getStuByStuNumber(stuNumber);
+        patientService.updatePatientState(true,patient);
+        patient = patientService.getStuByStuNumber(stuNumber);
 
         //个人信息注册到redis中
         try{
-            if(!userRedisService.isStuExist(student)){
-                userRedisService.insertStu(student);
+            if(!userRedisService.isStuExist(patient)){
+                userRedisService.insertStu(patient);
             }
         }catch (Exception e){
             logger.error("咨询者个人信息存入Redis失败");
@@ -172,7 +172,7 @@ public class StudentController {
         Patient stu = patientService.getStuById(id);
         Boolean state = patientService.updatePatientState(false,stu);
         if (state){
-            request.getSession().setAttribute("student",null);
+            request.getSession().setAttribute("patient",null);
             logger.info("咨询者注销成功！");
             return "redirect:/stu";
         }else{
@@ -187,8 +187,8 @@ public class StudentController {
      */
     @GetMapping(value = "/stu/toQuesPage")
     public String toQuesPage(HttpServletRequest request){
-        Patient patient = (Patient) request.getSession().getAttribute("student");
-        logger.info("student->{}",JSON.toJSON(patient));
+        Patient patient = (Patient) request.getSession().getAttribute("patient");
+        logger.info("patient->{}",JSON.toJSON(patient));
 
         List<Question> questions = questionService.getQuestionByStu(patient);
         request.setAttribute("questions",questions);
@@ -205,7 +205,7 @@ public class StudentController {
     @PostMapping(value = "/stu/question")
     public String submitQuestion(Question question, HttpServletRequest request){
         logger.info("提交的问题->{}",JSON.toJSON(question));
-        Patient patient = (Patient) request.getSession().getAttribute("student");
+        Patient patient = (Patient) request.getSession().getAttribute("patient");
         try{
             questionService.insertQues(question,patient);
         }catch (Exception e){
@@ -223,7 +223,7 @@ public class StudentController {
      */
     @GetMapping(value = "/stu/toAnsHood")
     public String toAnsHood(HttpServletRequest request){
-        Patient patient = (Patient) request.getSession().getAttribute("student");
+        Patient patient = (Patient) request.getSession().getAttribute("patient");
         System.out.println("toAnsHood " + patient);
         //问题日期
         List<String> dates = questionService. getDates();
@@ -311,7 +311,7 @@ public class StudentController {
      */
     @GetMapping(value = "/stu/toChatPage")
     public String toChatPage(HttpServletRequest request){
-        Patient patient = (Patient) request.getSession().getAttribute("student");
+        Patient patient = (Patient) request.getSession().getAttribute("patient");
 
         //获取聊天心理医生id 和 图像编号
         String doctorId = request.getParameter("doctorId");
@@ -388,8 +388,8 @@ public class StudentController {
     @GetMapping(value = "/stu/toMyAppointment")
     public String toMyAppointment(@RequestParam(required = false,defaultValue = "1") Integer pageNum,
                                   @RequestParam(defaultValue = "5",value = "pageSize") Integer pageSize,Model model,HttpServletRequest request){
-        Patient patient = (Patient) request.getSession().getAttribute("student");
-        logger.info("student->{}",JSON.toJSON(patient));
+        Patient patient = (Patient) request.getSession().getAttribute("patient");
+        logger.info("patient->{}",JSON.toJSON(patient));
 
         PageInfo<Appointment> myAppointments = patientService.getMyAppointment(pageNum, pageSize,patient.getId());
         model.addAttribute("myAppointments",myAppointments);

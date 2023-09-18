@@ -166,7 +166,7 @@
                                         <b-button th:if="${doctor.state}" class="btn btn-danger btn-simple btn-round waves-effect">点击</b-button>
                                     </a>
 
-                                    <a th:if="${!doctor.state}" th:href="@{/stu/toAppointment} + '?doctorId=' +${doctor.id} +'&stuId='+${session.student.id}">
+                                    <a th:if="${!doctor.state}" th:href="@{/stu/toAppointment} + '?doctorId=' +${doctor.id} +'&stuId='+${session.patient.id}">
                                         <b-button th:if="${!doctor.state}" class="btn btn-default btn-simple btn-round waves-effect">预约</b-button>
                                     </a>
                                 </td>
@@ -179,17 +179,17 @@
                     <div class="body">
                         <ul class="pagination pagination-primary m-b-0">
                             <li class="page-item" th:if="${doctorPageInfo.hasPreviousPage == true}">
-                                <a class="page-link" th:href="@{'/stu/toHomePage?pageNum='+${doctorPageInfo.prePage}+'&stuNumber='+${session.student.stuNumber}}">
+                                <a class="page-link" th:href="@{'/stu/toHomePage?pageNum='+${doctorPageInfo.prePage}+'&stuNumber='+${session.patient.stuNumber}}">
                                     <i class="zmdi zmdi-arrow-left"></i></a></li>
                             <div th:each="nav:${doctorPageInfo.navigatepageNums}">
                                 <li class="page-item "  th:if="${nav != doctorPageInfo.pageNum}">
-                                    <a class="page-link" th:href="@{'/stu/toHomePage?pageNum='+${nav}+'&stuNumber='+${session.student.stuNumber}}" th:text="${nav}" ></a></li>
+                                    <a class="page-link" th:href="@{'/stu/toHomePage?pageNum='+${nav}+'&stuNumber='+${session.patient.stuNumber}}" th:text="${nav}" ></a></li>
                                 <li class="page-item active"  th:if="${nav == doctorPageInfo.pageNum}">
-                                    <a class="page-link" th:href="@{'/stu/toHomePage?pageNum='+${nav}+'&stuNumber='+${session.student.stuNumber}}" th:text="${nav}" ></a></li>
+                                    <a class="page-link" th:href="@{'/stu/toHomePage?pageNum='+${nav}+'&stuNumber='+${session.patient.stuNumber}}" th:text="${nav}" ></a></li>
                             </div>
 
                             <li class="page-item" th:if="${doctorPageInfo.hasNextPage == true}">
-                                <a class="page-link" th:href="@{'/stu/toHomePage?pageNum='+${doctorPageInfo.nextPage}+'&stuNumber='+${session.student.stuNumber}}"><i class="zmdi zmdi-arrow-right"></i></a></li>
+                                <a class="page-link" th:href="@{'/stu/toHomePage?pageNum='+${doctorPageInfo.nextPage}+'&stuNumber='+${session.patient.stuNumber}}"><i class="zmdi zmdi-arrow-right"></i></a></li>
                         </ul>
                     </div>
                 </div>

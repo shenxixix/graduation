@@ -214,5 +214,16 @@ public class AdminController {
         return "redirect:/admin/toResourceManager";
     }
 
-
+    /**
+     * 管理员注销登录
+     * @param id
+     * @param request
+     * @return
+     */
+    @GetMapping(value = "/admin/return")
+    public String returnPage(Integer id,HttpServletRequest request){
+        request.getSession().setAttribute("admin",null);
+        logger.info("咨询者注销成功！");
+        return "redirect:/admin";
+    }
 }
