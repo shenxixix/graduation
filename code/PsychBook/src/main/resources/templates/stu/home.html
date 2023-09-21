@@ -75,7 +75,7 @@
             <div class="col-sm-12">
                 <div class="card">
                     <div class="body">
-                        <div class="row clearfix">
+                        <div class="row clearfix" >
                             <div class="col-lg-3 col-md-3 col-sm-12 text-center">
                                 <div class="body">
                                     <p class="number count-to m-t-0 m-b-5" data-from="0" data-to="13" data-speed="1000" data-fresh-interval="700">13</p>
@@ -119,7 +119,7 @@
         </div>
         <div class="row clearfix">
 
-            <div class="col-lg-8 col-md-12">
+            <div class="tb" style="width: 100%; padding-right: 15px; padding-left: 15px;">
                 <!--在线咨询-->
                 <div class="card">
                     <div class="header">
@@ -194,10 +194,8 @@
                     </div>
                 </div>
             </div>
-
-        <div th:include="/basic/leaderboard :: leaderBoard"></div>
-
-    </div>
+            <div th:include="/basic/leaderboard :: leaderBoard"></div>
+        </div>
     </div>
 
 </section>
@@ -215,19 +213,19 @@
 <script th:src="@{/doc/js/stu.js}"></script>
 
 <script th:inline="javascript">
-    //跳转到咨询者home页
     var app = new Vue({
-        el: "#home",
+        el: "#app1",
 
         data :{
             weather: [],
-            fengli:{},
-            essays:[],
+            fengli:{}
         },
+
         created : async function () {
 
         }
     })
 </script>
+
 </body>
 </html>

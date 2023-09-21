@@ -118,7 +118,7 @@ public class DoctorController {
         PageInfo<Patient> patientPage = patientService.getPatientPage(pageNum,pageSize);
         logger.info("首页心理医生列表分页->{}",JSON.toJSON(patientPage));
 
-        model.addAttribute("studentPageInfo",patientPage);
+        model.addAttribute("patientPage",patientPage);
 
         return "/doctor/home";
     }

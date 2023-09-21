@@ -58,7 +58,7 @@
                     </div>
                     <div class="content">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="请输入工号" name="doctorNumber" v-model="doctorNumber">
+                            <input type="text" class="form-control" placeholder="请输入编号" name="doctorNumber" v-model="doctorNumber">
                             <span class="input-group-addon">
                                 <i class="zmdi zmdi-account-circle"></i>
                             </span>
@@ -194,7 +194,7 @@
                 this.flag = 0;
 //                注意加this,表示vue与页面绑定的对象,以及如何判空
                 if($.isEmptyObject(this.doctorNumber)){
-                    this.text1 = "教师工号不能为空"
+                    this.text1 = "教师编号不能为空"
                 }else {
                     this.flag++;
                     this.text1 = "";
@@ -272,7 +272,7 @@
 
                     if(!$.isEmptyObject(this.doctor)){
                         alert($.isEmptyObject(this.doctor))
-                        this.text1 = "该工号已注册"
+                        this.text1 = "该编号已注册"
                     }else{
 
 //                      post提交表单

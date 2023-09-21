@@ -162,7 +162,7 @@ DROP TABLE IF EXISTS `doctor`;
 
 CREATE TABLE `doctor` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '心理医生id',
-  `doctor_Number` varchar(255) DEFAULT NULL COMMENT '心理医生工号',
+  `doctor_Number` varchar(255) DEFAULT NULL COMMENT '心理医生编号',
   `name` varchar(255) DEFAULT NULL COMMENT '心理医生姓名',
   `gender` int(11) DEFAULT NULL COMMENT '心理医生性别',
   `age` int(11) DEFAULT NULL COMMENT '年龄',
