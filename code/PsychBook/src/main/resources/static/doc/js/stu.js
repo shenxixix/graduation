@@ -5,59 +5,94 @@ var app = new Vue({
         stuNumber: "",
         password: "",
         content: "",
-        student: {},
+        patient: {},
+        tel:"",
+        code:"",
+        isPass:true,
+        endCodeDes: "获取验证码",
+        endCodeStart:false,
+        endStartNum: 60,
+        timer:null
     },
     methods: {
         submitForm: async function () {
 
-            this.student = {}
+            this.patient = {}
+            if(this.isPass) {
 //                用户名或密码为空
-            if (this.stuNumber.split(" ").join("").length === 0
-                || this.password.split(" ").join("").length === 0) {
-                this.content = "用户名或密码不能为空"
-                return false
-            }
-//                用户名或密码错误
-            else {
-
-                _this = this;
-
-                axios({
-                    method: "GET",
-                    url: "stu/stuChecked",
-                    data: {
-                        stuNumber: this.stuNumber,
-                        password: this.password
+                if (this.stuNumber.split(" ").join("").length === 0
+                    || this.password.split(" ").join("").length === 0) {
+                    this.content = "用户名或密码不能为空"
+                    return false
+                }
+//           用户名或密码错误
+                else {
+                    _this = this;
+                    try {
+                        console.log(this.stuNumber);
+                        console.log($.md5(this.password));
+                        await axios.get("/psych/stu/stuChecked?stuNumber=" + this.stuNumber + "&password=" + $.md5(this.password)).then(res => {
+                            //注意回调函数的this和vue的this会产生歧义
+                            _this.patient = res.data;
+                        })
+                    } catch (err) {
+                        console.log(err)
                     }
-                }).then(function (res) {
-                    _this.student = res.data;
-//                        alert(_this.student)
-                }).catch(function (error) {
-                    console.log(error);
-                });
-
-                try{
-                    console.log(this.stuNumber);
-                    console.log(this.password);
-                    await axios.get("/psych/stu/stuChecked?stuNumber="+this.stuNumber +"&password="+this.password).
-                    then(res => {
-                        //注意回调函数的this和vue的this会产生歧义
-                        _this.student = res.data;
-//                                        console.log("res.data.data",res.data.data) undefined
-//                                        console.log("res.data",res.data) json
-                    })
-                }catch (err){
-                    console.log(err)
+                    console.log(this.patient)
+                    if (!($.isEmptyObject(this.patient))) {
+                        this.content = ""
+                        location.href = "/psych/stu/toHomePage?stuNumber=" + this.patient.stuNumber
+                    } else {
+                        this.content = "用户名或密码错误"
+                    }
                 }
-
-//                    alert("this.student" , this.student)
-                console.log(this.student)
-                if (!($.isEmptyObject(this.student))) {
-                    this.content = ""
-                    location.href = "/psych/stu/toHomePage?stuNumber=" + this.stuNumber
-                }else {
-                    this.content = "用户名或密码错误"
+            } else {
+                //  验证码登录
+                if (this.tel.split(" ").join("").length === 0
+                    || this.code.split(" ").join("").length === 0) {
+                    this.content = "电话号码或验证码不能为空"
+                    return false
                 }
+                //           验证码登录
+                else {
+                    _this = this;
+                    try {
+                        console.log(this.tel);
+                        console.log(this.code);
+                        await axios.get("/psych/stu/stuAuthcode?tel=" + this.tel + "&authcode=" + this.code).then(res => {
+                            //注意回调函数的this和vue的this会产生歧义
+                            _this.patient = res.data;
+                        })
+                    } catch (err) {
+                        console.log(err)
+                    }
+                    console.log(this.patient)
+                    if (!($.isEmptyObject(this.patient)) && this.patient.stuNumber) {
+                        this.content = ""
+                        location.href = "/psych/stu/toHomePage?stuNumber=" + this.patient.stuNumber
+                    } else {
+                        this.content = "电话号码或验证码错误"
+                    }
+                }
+            }
+        },
+        changeLoginMode: function (isPassword) {
+            this.isPass = isPassword;
+        },
+        getAuthCode: function () {
+            if(!this.endCodeStart) {
+                this.endStartNum = 60;
+                this.timer = setInterval(this.count, 1000);
+            }
+        },
+        count: function () {
+            if(this.endStartNum == 0) {
+                this.endCodeDes = "获取验证码";
+                clearInterval(this.timer);
+                this.timer = null;
+            } else {
+                this.endStartNum = this.endStartNum - 1;
+                this.endCodeDes = this.endStartNum;
             }
         }
     }
@@ -83,7 +118,7 @@ var app = new Vue({
         text5: "",
         text6: "",
         text7: "",
-        student: {}
+        patient: {}
     },
     methods:{
         submitForm: async function () {
@@ -144,17 +179,17 @@ var app = new Vue({
                 try{
                     await axios.get("/psych/stu/stuChecked1?stuNumber=" + this.stuNumber)
                         .then(res => {
-                            _this.student = res.data
+                            _this.patient = res.data
                         })
                 }catch(err){
                     console.log(err);
                     alert("请求出错")
                 }
 
-                console.log(this.student)
+                console.log(this.patient)
 
-                if(!$.isEmptyObject(this.student)){
-                    alert($.isEmptyObject(this.student))
+                if(!$.isEmptyObject(this.patient)){
+                    alert($.isEmptyObject(this.patient))
                     this.text1 = "该咨询者号已注册"
                 }else{
                     // alert("注册成功")

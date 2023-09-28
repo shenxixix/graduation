@@ -72,7 +72,17 @@ public class DoctorServiceImp implements DoctorService {
     @Override
     public Doctor doctorChecked(String doctorNumber, String password) {
         Doctor doctor = doctorMapper.getDoctorByDoctorNumberAndPassword(doctorNumber,password);
-        logger.info("get student is->{}", JSON.toJSON(doctor));
+        logger.info("get doctor is->{}", JSON.toJSON(doctor));
+        return doctor;
+    }
+
+    @Override
+    public Doctor doctorAuthcode(String tel, String authcode) {
+        Doctor doctor = doctorMapper.selectDoctorByTel(tel);
+        if(doctor == null || !authcode.equals("888888")) {
+            throw new RuntimeException("验证码异常");
+        }
+        logger.info("get doctor is->{}", JSON.toJSON(doctor));
         return doctor;
     }
 

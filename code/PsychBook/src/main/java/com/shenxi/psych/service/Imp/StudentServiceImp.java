@@ -45,34 +45,37 @@ public class StudentServiceImp implements PatientService {
     @Override
     public int insertPatientAndLogin(Patient patient) {
         patientMapper.insertStu(patient);
-
         String stuNumber = patient.getStuNumber();
         Integer accountId = patientMapper.selectIdByStuNumber(stuNumber);
+        if(accountId != null) {
+            throw new RuntimeException("该编号已经注册，请更换");
+        }
+        Patient pt = patientMapper.selectStuByTel(patient.getTel());
+        if(pt != null){
+            throw new RuntimeException("该电话号码已经注册，请更换");
+        }
+        patientMapper.insertStu(patient);
 
-        //插入login
-        Login login = new Login();
-        login.setAccountId(accountId);
-        login.setAccountName(patient.getName());
-        login.setPassword(Md5Util.StringInMd5(patient.getPassword()));
-        login.setGmtCreate(System.currentTimeMillis());
-        logger.info("login is->{}",JSON.toJSON(login));
-        loginMapper.insertLogin(login);
-
-        //插入userInfo
-        UserInfo userinfo = new UserInfo();
-        userinfo.setNickName(patient.getName());
-        userinfo.setUserId(accountId);
-        userinfo.setGmtCreate(System.currentTimeMillis());
-        logger.info("userinfo is->{}",JSON.toJSON(userinfo));
-        loginMapper.insertUserInfo(userinfo);
-
+        // TODO 新增用户关系表
         return 1;
     }
 
     @Override
     public Patient stuChecked(String stuNumber, String password) {
         Patient patient = patientMapper.selectPatient(stuNumber,password);
+        logger.info("get patient is->{}", JSON.toJSON(patient));
+        // TODO 新增登录信息表
+        return patient;
+    }
+
+    @Override
+    public Patient stuAuthcode(String tel, String authcode) {
+        Patient patient = patientMapper.selectStuByTel(tel);
+        if(patient == null || !authcode.equals("888888")) {
+            throw new RuntimeException("验证码异常");
+        }
         logger.info("get student is->{}", JSON.toJSON(patient));
+        // TODO 新增登录信息表
         return patient;
     }
 

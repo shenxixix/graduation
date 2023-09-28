@@ -28,7 +28,7 @@ module.exports = function(grunt) {
                 'assets/bundles/vendorscripts.bundle.js':
                 ['assets/plugins/bootstrap-select/js/bootstrap-select.js','assets/plugins/jquery-slimscroll/jquery.slimscroll.js','assets/plugins/node-waves/waves.js','assets/plugins/fullscreen/screenfull.js','assets/plugins/jquery-sparkline/jquery.sparkline.js','assets/plugins/jquery-countto/jquery.countTo.js'], /* coman js*/
                 'assets/bundles/mainscripts.bundle.js':
-                ['assets/js/admin.js','assets/js/demo.js','assets/js/fullscreen.js'], /*coman js*/
+                ['assets/js/admin.js','assets/js/demo.js','assets/js/fullscreen.js','assets/js/jquery.md5.js'], /*coman js*/
 				                
                 'assets/bundles/index.jvectormap.bundle.js': ['assets/plugins/jvectormap/jquery-jvectormap-2.0.3.min.js','assets/plugins/jvectormap/jquery-jvectormap-world-mill-en.js','assets/plugins/jvectormap/jquery-jvectormap-in-mill.js','assets/plugins/jvectormap/jquery-jvectormap-us-aea-en.js'], /* ChartJs js*/
 

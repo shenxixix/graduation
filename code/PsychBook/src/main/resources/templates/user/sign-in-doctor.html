@@ -79,7 +79,7 @@
                         </div>
                         <h5>心理医生登录</h5>
                     </div>
-                    <div class="content">
+                    <div class="content"  v-show="isPass">
                         <div class="input-group input-lg">
                             <input id="doctorNumber" type="text" class="form-control" placeholder="请输入编号" v-model="doctorNumber"/>
                             <span class="input-group-addon">
@@ -94,9 +94,28 @@
                         </div>
                         <div style="color:#ff7878;" v-text="content"></div>
                     </div>
+                    <div class="content" v-show="!isPass">
+                        <div class="input-group input-lg">
+                            <input id="tel" type="text" class="form-control" placeholder="请输入电话号码" v-model="tel"/>
+                            <span class="input-group-addon">
+                                <i class="zmdi zmdi-account-circle"></i>
+                            </span>
+                        </div>
+                        <div class="input-group input-lg">
+                            <input id="code" type="password" placeholder="请输入验证码" class="form-control" v-model="code"/>
+                            <span class="input-group-addon">
+                                 <a class="link" href="#" @click="getAuthCode">{{endCodeDes}}</a>
+                            </span>
+                        </div>
+                        <div style="color:#ff7878;" v-text="content"></div>
+                    </div>
                     <div class="footer text-center">
                         <b-button id="submitStu" class="btn btn-primary btn-round btn-lg btn-block " @click="submitForm">登录</b-button>
-                        <h5><a href="forgot-password.html" class="link">忘记密码?</a></h5>
+                        <h5>
+                            <a class="link" href="#" v-show="isPass" @click="changeLoginMode(false)">验证码登录</a>
+                            <a class="link" href="#" v-show="!isPass" @click="changeLoginMode(true)">密码登录</a>
+                            <a href="forgot-password.html" class="link">忘记密码?</a>
+                        </h5>
                     </div>
                 </form>
             </div>
@@ -125,8 +144,8 @@
 <!-- Jquery Core Js -->
 <script th:src="@{/assets/bundles/libscripts.bundle.js}"></script>
 <script th:src="@{/assets/bundles/vendorscripts.bundle.js}"></script>
-
 <script th:src="@{/assets/bundles/mainscripts.bundle.js}"></script>
+<script th:src="@{/assets/js/jquery.md5.js}"></script>
 
 <script th:inline="javascript">
     /*<![CDATA[*/
@@ -138,41 +157,91 @@
             password: "",
             content: "",
             doctor: {},
+            tel:"",
+            code:"",
+            isPass:true,
+            endCodeDes: "获取验证码",
+            endCodeStart:false,
+            endStartNum: 60,
+            timer:null
         },
         methods: {
             submitForm: async function () {
 
-                this.student = {}
+                this.doctor = {}
+                if (this.isPass) {
 //                用户名或密码为空
-                if (this.doctorNumber.split(" ").join("").length === 0
-                    || this.password.split(" ").join("").length === 0) {
-                    this.content = "用户名或密码不能为空"
-                    return false
-                }
+                    if (this.doctorNumber.split(" ").join("").length === 0
+                        || this.password.split(" ").join("").length === 0) {
+                        this.content = "用户名或密码不能为空"
+                        return false
+                    }
 //                用户名或密码错误
-                else {
-
-                    _this = this;
-
-                    try{
-                         await axios.get("/psych/doctor/doctorChecked?doctorNumber="+this.doctorNumber +"&password="+this.password).
-                                    then(res => {
-                                        //注意回调函数的this和vue的this会产生歧义
-                                        _this.doctor = res.data;
-//                                        console.log("res.data.data",res.data.data) undefined
-//                                        console.log("res.data",res.data) json
-                                    })
-                    }catch (err){
-                        console.log(err)
+                    else {
+                        _this = this;
+                        try {
+                            await axios.get("/psych/doctor/doctorChecked?doctorNumber=" + this.doctorNumber + "&password=" + $.md5(this.password)).then(res => {
+                                //注意回调函数的this和vue的this会产生歧义
+                                _this.doctor = res.data;
+                            })
+                        } catch (err) {
+                            console.log(err)
+                        }
+                        console.log(this.doctor)
+                        if (!($.isEmptyObject(this.doctor))) {
+                            this.content = ""
+                            location.href = "/psych/doctor/toHomePage?doctorNumber=" + this.doctorNumber
+                        } else {
+                            this.content = "用户名或密码错误"
+                        }
                     }
-                    console.log(this.doctor)
-                    if (!($.isEmptyObject(this.doctor))) {
-                        this.content = ""
-
-                        location.href = "/psych/doctor/toHomePage?doctorNumber=" + this.doctorNumber
-                    }else {
-                        this.content = "用户名或密码错误"
+                } else {
+                    //  验证码登录
+                    if (this.tel.split(" ").join("").length === 0
+                        || this.code.split(" ").join("").length === 0) {
+                        this.content = "电话号码或验证码不能为空"
+                        return false
                     }
+                    //           验证码登录
+                    else {
+                        _this = this;
+                        try {
+                            console.log(this.tel);
+                            console.log(this.code);
+                            await axios.get("/psych/doctor/doctorAuthcode?tel=" + this.tel + "&authcode=" + this.code).then(res => {
+                                //注意回调函数的this和vue的this会产生歧义
+                                _this.doctor = res.data;
+                            })
+                        } catch (err) {
+                            console.log(err)
+                        }
+                        console.log(this.doctor)
+                        if (!($.isEmptyObject(this.doctor)) && this.doctor.doctorNumber) {
+                            this.content = ""
+                            location.href = "/psych/doctor/toHomePage?doctorNumber=" + this.doctor.doctorNumber
+                        } else {
+                            this.content = "电话号码或验证码错误"
+                        }
+                    }
+                }
+            },
+            changeLoginMode: function (isPassword) {
+                this.isPass = isPassword;
+            },
+            getAuthCode: function () {
+                if(!this.endCodeStart) {
+                    this.endStartNum = 60;
+                    this.timer = setInterval(this.count, 1000);
+                }
+            },
+            count: function () {
+                if(this.endStartNum == 0) {
+                    this.endCodeDes = "获取验证码";
+                    clearInterval(this.timer);
+                    this.timer = null;
+                } else {
+                    this.endStartNum = this.endStartNum - 1;
+                    this.endCodeDes = this.endStartNum;
                 }
             }
         }

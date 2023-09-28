@@ -27,6 +27,8 @@ public interface DoctorService {
 
     Doctor doctorChecked(String doctorNumber,String password);
 
+    Doctor doctorAuthcode(String tel,String authcode);
+
     Boolean updateDoctorState(boolean state, Doctor doctor);
 
     PageInfo<Doctor> getAllDoctor(Integer pageNum, Integer pageSize);

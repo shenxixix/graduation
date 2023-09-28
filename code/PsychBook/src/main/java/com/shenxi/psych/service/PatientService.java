@@ -15,6 +15,8 @@ public interface PatientService {
 
     Patient stuChecked(String stuNumber, String password);
 
+    Patient stuAuthcode(String tel, String authcode);
+
     Patient getStuById(Integer id);
 
     Patient getStuByStuNumber(String stuNumber);

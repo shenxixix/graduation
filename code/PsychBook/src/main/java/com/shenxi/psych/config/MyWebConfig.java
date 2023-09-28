@@ -46,7 +46,7 @@ public class MyWebConfig extends WebMvcConfigurerAdapter {
 //        registration.excludePathPatterns("/stu1","/doctor1","/admin1");
         registration.excludePathPatterns("/stu/toRegister","/doctor/toRegister","/admin/toRegister");
         registration.excludePathPatterns("/stu/register","/doctor/register","/admin/register");
-        registration.excludePathPatterns("/stu/stuChecked","/doctor/doctorChecked","/admin/adminChecked");
+        registration.excludePathPatterns("/stu/stuChecked","/doctor/doctorChecked","/admin/adminChecked","/stu/stuAuthcode","/doctor/doctorAuthcode");
         registration.excludePathPatterns("/stu/stuChecked1","/doctor/doctorChecked1","/admin/adminChecked1");
         registration.excludePathPatterns("/stu/toHomePage","/doctor/toHomePage","/admin/toHomePage");
     }

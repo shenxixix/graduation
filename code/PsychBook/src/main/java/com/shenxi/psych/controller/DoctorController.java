@@ -83,6 +83,17 @@ public class DoctorController {
     }
 
     /**
+     * 验证码登录（电话号码 + 验证码）
+     * @return
+     */
+    @GetMapping(value = "/doctor/doctorAuthcode")
+    @ResponseBody
+    public Doctor doctorAuthcode(String tel,String authcode){
+        logger.info("tel->{},authcode->{}",tel,authcode);
+        return doctorService.doctorAuthcode(tel,authcode);
+    }
+
+    /**
      * 完成注册，跳转到登录页面
      * @param doctor
      * @return

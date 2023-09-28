@@ -29,6 +29,9 @@ public interface PatientMapper {
     @Select("select * from patient where stu_number = #{stuNumber}")
     Patient selectStuByStuNumber(String stuNumber);
 
+    @Select("select * from patient where tel = #{tel}")
+    Patient selectStuByTel(String tel);
+
     @Select("select id from patient where stu_number = #{stuNumber}")
     Integer selectIdByStuNumber(String stuNumber);
 

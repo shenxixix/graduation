@@ -80,7 +80,7 @@
                         </div>
                         <h5>咨询者登录</h5>
                     </div>
-                    <div class="content">
+                    <div class="content" v-show="isPass">
                         <div class="input-group input-lg">
                             <input id="stuNumber" type="text" class="form-control" placeholder="请输入咨询者号" v-model="stuNumber"/>
                             <span class="input-group-addon">
@@ -95,9 +95,28 @@
                         </div>
                         <div style="color:#ff7878;" v-text="content"></div>
                     </div>
+                    <div class="content" v-show="!isPass">
+                        <div class="input-group input-lg">
+                            <input id="tel" type="text" class="form-control" placeholder="请输入电话号码" v-model="tel"/>
+                            <span class="input-group-addon">
+                                <i class="zmdi zmdi-account-circle"></i>
+                            </span>
+                        </div>
+                        <div class="input-group input-lg">
+                            <input id="code" type="password" placeholder="请输入验证码" class="form-control" v-model="code"/>
+                            <span class="input-group-addon">
+                                 <a class="link" href="#" @click="getAuthCode">{{endCodeDes}}</a>
+                            </span>
+                        </div>
+                        <div style="color:#ff7878;" v-text="content"></div>
+                    </div>
                     <div class="footer text-center">
                         <b-button id="submitStu" class="btn btn-primary btn-round btn-lg btn-block " @click="submitForm">登录</b-button>
-                        <h5><a href="forgot-password.html" class="link">忘记密码?</a></h5>
+                        <h5>
+                            <a class="link" href="#" v-show="isPass" @click="changeLoginMode(false)">验证码登录</a>
+                            <a class="link" href="#" v-show="!isPass" @click="changeLoginMode(true)">密码登录</a>
+                            <a href="forgot-password.html" class="link">忘记密码?</a>
+                        </h5>
                     </div>
                 </form>
             </div>
@@ -128,6 +147,7 @@
 <script th:src="@{/assets/bundles/vendorscripts.bundle.js}"></script>
 
 <script th:src="@{/assets/bundles/mainscripts.bundle.js}"></script>
+<script th:src="@{/assets/js/jquery.md5.js}"></script>
 <script th:src="@{/doc/js/stu.js}"></script>
 
 </body>

@@ -121,6 +121,18 @@ public class PatientController {
     }
 
     /**
+     * 验证码登录（电话号码 + 验证码）
+     * @return
+     */
+    @GetMapping(value = "/stu/stuAuthcode")
+    @ResponseBody
+    public Patient stuAuthcode(String tel,String authcode){
+
+        logger.info("tel->{},authcode->{}",tel,authcode);
+        return patientService.stuAuthcode(tel,authcode);
+    }
+
+    /**
      * 跳转到咨询者主页
      * @param stuNumber
      * @return
@@ -131,13 +143,8 @@ public class PatientController {
                              String stuNumber, HttpServletRequest request, Model model){
         logger.info("跳转到咨询者主页,patient->{}",stuNumber);
         Patient patient = patientService.getStuByStuNumber(stuNumber);
-
-        //往session中存入咨询者聊天帐号
-        Login login = loginService.getLoginFromStu(patient);
-        logger.info("login from Stu->{}",JSON.toJSON(login) );
-        String userid = loginService.justLogin(login);
         List<Document> documents = resourcesService.getAllDocument();
-        request.getSession().setAttribute("userid",Integer.valueOf(userid));
+        request.getSession().setAttribute("userid",Integer.valueOf(patient.getId()));
         request.getSession().setAttribute("patient",patient);
         request.getSession().setAttribute("documents",documents);
 

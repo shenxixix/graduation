@@ -2,6 +2,7 @@ package com.shenxi.psych.mapper;
 
 import com.shenxi.psych.entity.Appointment;
 import com.shenxi.psych.entity.Doctor;
+import com.shenxi.psych.entity.Patient;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
 
@@ -62,4 +63,7 @@ public interface DoctorMapper {
 
     @Delete("delete from doctor where id = #{doctorId}")
     void delectDoctorById(Integer doctorId);
+
+    @Select("select * from doctor where tel = #{tel}")
+    Doctor selectDoctorByTel(String tel);
 }

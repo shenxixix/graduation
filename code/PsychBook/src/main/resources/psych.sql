@@ -30,7 +30,7 @@ CREATE TABLE appointment (
   state int(11) DEFAULT NULL COMMENT '状态',
   cause varchar(255) DEFAULT NULL COMMENT '咨询原因',
   fee int(11) COMMENT '费用',
-  pay_status int(11) DEFAULT 0 COMMENT '支付状态0:未支付 1:已支付'
+  pay_status int(11) DEFAULT 0 COMMENT '支付状态0:未支付 1:已支付',
   gmt_create bigint(20) DEFAULT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
@@ -140,6 +140,7 @@ CREATE TABLE doctor (
   id int(11) NOT NULL AUTO_INCREMENT COMMENT '心理医生id',
   doctor_Number varchar(255) DEFAULT NULL COMMENT '心理医生编号',
   name varchar(255) DEFAULT NULL COMMENT '心理医生姓名',
+  user_img varchar(255) DEFAULT NULL,
   gender int(11) DEFAULT NULL COMMENT '心理医生性别',
   age int(11) DEFAULT NULL COMMENT '年龄',
   teach_years int(11) DEFAULT NULL COMMENT '服务年限',
@@ -205,17 +206,12 @@ CREATE TABLE login (
   id int(20) NOT NULL AUTO_INCREMENT COMMENT '登录表id',
   account_id int(20) NOT NULL COMMENT '用户id',
   account_name varchar(255) NOT NULL COMMENT '用户名',
+  type int(11) NOT NULL COMMENT '用户名类型1:管理员 2:咨询者 3:医生',
   password varchar(255) NOT NULL COMMENT '用户登录密码',
   gmt_create bigint(20) DEFAULT NULL COMMENT '创建账户时间',
   gmt_modified bigint(20) DEFAULT NULL COMMENT '修改账户时间',
   PRIMARY KEY (id)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
-
-insert  into login(id,account_id,account_name,password,gmt_create,gmt_modified) values 
-(6,10,'test1','5a105e8b9d40e1329780d62ea2265d8a',1615443310277,NULL),
-(7,11,'test2','ad0234829205b9033196ba818f7a872b',1615470504709,NULL),
-(8,12,'啦啦啦','e10adc3949ba59abbe56e057f20f883e',1616512596003,NULL),
-(9,13,'嘿嘿嘿','e10adc3949ba59abbe56e057f20f883e',1620355862790,NULL);
 
 DROP TABLE IF EXISTS question;
 CREATE TABLE question (
@@ -264,6 +260,7 @@ CREATE TABLE patient (
   id int(11) NOT NULL AUTO_INCREMENT COMMENT '咨询者表id',
   stu_number varchar(255) NOT NULL COMMENT '咨询者编号',
   name varchar(255) NOT NULL COMMENT '咨询者名称',
+  user_img varchar(255) DEFAULT NULL,
   gender int(11) DEFAULT '0' COMMENT '咨询者性别',
   age int(20) DEFAULT NULL COMMENT '咨询者年龄',
   tel varchar(255) DEFAULT NULL COMMENT '咨询者电话',
@@ -276,9 +273,9 @@ CREATE TABLE patient (
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 insert  into patient(id,stu_number,name,gender,age,tel,email,password,state,gmt_create,gmt_modified) values
-(10,'04172078','test1',0,23,'15043912738','13467347324@qq.com','test1',0,1615443307173,NULL),
-(11,'04172079','test2',1,22,'15043912738','23456434@qq.com','test2',0,1615470501602,NULL),
-(12,'04172077','啦啦啦',1,22,'15043912738','lizhenfeng@didiglobal.com','123456',1,1616512595945,NULL);
+(10,'04172078','test1',0,23,'15043912737','13467347324@qq.com','e10adc3949ba59abbe56e057f20f883e',0,1615443307173,NULL),
+(11,'04172079','test2',1,22,'15043912738','23456434@qq.com','e10adc3949ba59abbe56e057f20f883e',0,1615470501602,NULL),
+(12,'04172077','啦啦啦',1,22,'15043912739','lizhenfeng@didiglobal.com','e10adc3949ba59abbe56e057f20f883e',1,1616512595945,NULL);
 
 DROP TABLE IF EXISTS tag;
 CREATE TABLE tag (
@@ -292,23 +289,6 @@ insert  into tag(id,tag_name) values
 (2,'自卑'),
 (3,'宿舍'),
 (4,'家庭');
-
-DROP TABLE IF EXISTS user_info;
-CREATE TABLE user_info (
-  id int(11) NOT NULL AUTO_INCREMENT COMMENT '用户信息表id',
-  nick_name varchar(255) NOT NULL COMMENT '别名',
-  user_id int(11) NOT NULL COMMENT '用户id',
-  user_img varchar(255) DEFAULT NULL,
-  gmt_create bigint(20) DEFAULT NULL,
-  gmt_modified bigint(20) DEFAULT NULL,
-  PRIMARY KEY (id)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
-
-insert  into user_info(id,nick_name,user_id,user_img,gmt_create,gmt_modified) values 
-(1,'test1',10,'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3222454269,3484359568&fm=26&gp=0.jpg',1615443311816,NULL),
-(2,'test2',11,'https://gss0.baidu.com/70cFfyinKgQFm2e88IuM_a/forum/w=580/sign=6d09f1971f30e924cfa49c397c096e66/bcb8ada1cd11728b2d1160bdc8fcc3cec2fd2cad.jpg',1615470505902,NULL),
-(3,'啦啦啦',12,'https://img2.baidu.com/it/u=1601406830,2108761440&fm=26&fmt=auto&gp=0.jpg',1616512596032,NULL),
-(4,'嘿嘿嘿',13,NULL,1620355862846,NULL);
 
 CREATE TABLE user_auth_code (
   id int(11) NOT NULL AUTO_INCREMENT COMMENT '用户手机登录验证码表',
