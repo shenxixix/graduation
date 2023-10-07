@@ -97,16 +97,16 @@ public class StudentServiceImp implements PatientService {
         try{
             userRedisService.removePatientByValue(patient);
         }catch (Exception e){
-            throw new CMSException(ResultCodeEnum.UPDATE_STU_STATE_IN_REDIS);
+      //      throw new CMSException(ResultCodeEnum.UPDATE_STU_STATE_IN_REDIS);
         }
 
         Integer id = patient.getId();
         //再修改数据库中的状态为离线
         Integer res = patientMapper.updatePatientState(state,id);
-        if (res == 0)
-            throw new CMSException(ResultCodeEnum.UPDATE_STU_STATE_IN_DB);
-        else
-            return true;
+     //   if (res == 0)
+      //      throw new CMSException(ResultCodeEnum.UPDATE_STU_STATE_IN_DB);
+      //  else
+        return true;
     }
 
     @Override
