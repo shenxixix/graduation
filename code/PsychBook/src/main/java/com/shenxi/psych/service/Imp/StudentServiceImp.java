@@ -60,22 +60,42 @@ public class StudentServiceImp implements PatientService {
         return 1;
     }
 
+    /**
+     *  用户名密码登录
+     * @param stuNumber 用户名
+     * @param password  密码
+     * @return
+     */
     @Override
     public Patient stuChecked(String stuNumber, String password) {
-        Patient patient = patientMapper.selectPatient(stuNumber,password);
+        Patient patient = patientMapper.selectStuByStuNumber(stuNumber);
+        if(patient == null) {
+            throw new RuntimeException("用户不存在");
+        }
+        if(!patient.getPassword().equals(password)) {
+            throw new RuntimeException("用户密码错误");
+        }
         logger.info("get patient is->{}", JSON.toJSON(patient));
         // TODO 新增登录信息表
         return patient;
     }
 
+    /**
+     * 验证码登录
+     * @param tel
+     * @param authcode
+     * @return
+     */
     @Override
     public Patient stuAuthcode(String tel, String authcode) {
         Patient patient = patientMapper.selectStuByTel(tel);
-        if(patient == null || !authcode.equals("888888")) {
-            throw new RuntimeException("验证码异常");
+        if(patient == null) {
+            throw new RuntimeException("用户不存在");
+        }
+        if(patient == null || !authcode.equals(getCodeByTel(tel))) {
+            throw new RuntimeException("验证码错误");
         }
         logger.info("get student is->{}", JSON.toJSON(patient));
-        // TODO 新增登录信息表
         return patient;
     }
 
@@ -238,5 +258,9 @@ public class StudentServiceImp implements PatientService {
             PageHelper.clearPage(); //清理 ThreadLocal 存储的分页参数,保证线程安全
         }
         return null;
+    }
+
+    private String getCodeByTel(String tel) {
+        return "888888";
     }
 }

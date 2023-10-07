@@ -5,18 +5,22 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.shenxi.psych.entity.Appointment;
 import com.shenxi.psych.entity.Doctor;
+import com.shenxi.psych.entity.Login;
 import com.shenxi.psych.entity.Patient;
 import com.shenxi.psych.mapper.DoctorMapper;
+import com.shenxi.psych.mapper.LoginMapper;
 import com.shenxi.psych.mapper.PatientMapper;
 import com.shenxi.psych.service.DoctorService;
 import com.shenxi.psych.service.RedisService.UserRedisService;
 import com.shenxi.psych.utils.exception.CMSException;
 import com.shenxi.psych.utils.exception.ResultCodeEnum;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,6 +41,9 @@ public class DoctorServiceImp implements DoctorService {
 
     @Autowired
     private UserRedisService userRedisService;
+
+    @Autowired
+    private LoginMapper loginMapper;
 
     @Override
     public Doctor getDoctorById(Integer id) {
@@ -61,6 +68,24 @@ public class DoctorServiceImp implements DoctorService {
 
     @Override
     public void insertDoctor(Doctor doctor) {
+        String username = doctor.getDoctorNumber();
+        String password = doctor.getPassword();
+        String tel = doctor.getTel();
+        if(StringUtils.isEmpty(username)) {
+            throw new RuntimeException("用户名不能为空");
+        }
+        if(StringUtils.isEmpty(password)) {
+            throw new RuntimeException("密码不能为空");
+        }
+        if(StringUtils.isEmpty(tel)) {
+            throw new RuntimeException("电话号码不能为空");
+        }
+        if(doctorMapper.getDoctorByDoctorNumber(username) != null) {
+            throw new RuntimeException("该用户名已经存在");
+        }
+        if(doctorMapper.selectDoctorByTel(tel) != null) {
+            throw new RuntimeException("该手机号已经存在");
+        }
         doctorMapper.insertDoctor(doctor);
     }
 
@@ -69,20 +94,52 @@ public class DoctorServiceImp implements DoctorService {
         return patientMapper.getDoctorState(state);
     }
 
+    /**
+     *  用户名密码登录
+     * @param doctorNumber 用户名
+     * @param password 密码
+     * @return
+     */
     @Override
     public Doctor doctorChecked(String doctorNumber, String password) {
-        Doctor doctor = doctorMapper.getDoctorByDoctorNumberAndPassword(doctorNumber,password);
+        Doctor doctor =doctorMapper.getDoctorByDoctorNumber(doctorNumber);
+        if(doctor == null) {
+            throw new RuntimeException("用户不存在");
+        }
+        if(doctor == null || !doctor.getPassword().equals(password)) {
+            throw new RuntimeException("验证码错误");
+        }
         logger.info("get doctor is->{}", JSON.toJSON(doctor));
+        // 记录登录日志
+        Login login = new Login();
+        login.setAccountId(doctor.getId());
+        login.setAccountName(doctor.getDoctorNumber());
+        login.setGmtCreate(new Date().getTime());
+        loginMapper.insertLogin(login);
         return doctor;
     }
 
+    /**
+     * 验证码登录
+     * @param tel 电话号码
+     * @param authcode 验证码
+     * @return
+     */
     @Override
     public Doctor doctorAuthcode(String tel, String authcode) {
         Doctor doctor = doctorMapper.selectDoctorByTel(tel);
-        if(doctor == null || !authcode.equals("888888")) {
-            throw new RuntimeException("验证码异常");
+        if(doctor == null) {
+            throw new RuntimeException("用户不存在");
+        }
+        if(doctor == null || !authcode.equals(getCodeByTel(tel))) {
+            throw new RuntimeException("验证码错误");
         }
         logger.info("get doctor is->{}", JSON.toJSON(doctor));
+        Login login = new Login();
+        login.setAccountId(doctor.getId());
+        login.setAccountName(doctor.getDoctorNumber());
+        login.setGmtCreate(new Date().getTime());
+        loginMapper.insertLogin(login);
         return doctor;
     }
 
@@ -233,5 +290,9 @@ public class DoctorServiceImp implements DoctorService {
         List<Integer> ids = doctorMapper.getAll();
         logger.info("所有id->{}",JSON.toJSON(ids));
         return ids;
+    }
+
+    private String getCodeByTel(String tel) {
+        return "888888";
     }
 }

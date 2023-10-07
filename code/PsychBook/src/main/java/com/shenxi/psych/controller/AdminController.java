@@ -7,6 +7,7 @@ import com.shenxi.psych.service.AdminService;
 import com.shenxi.psych.service.DoctorService;
 import com.shenxi.psych.service.ResourcesService;
 import com.shenxi.psych.service.PatientService;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -155,28 +156,28 @@ public class AdminController {
      * @throws IOException
      */
     @PostMapping("/admin/postDocument")
-    public String postFile(HttpServletRequest request) throws IOException {
-        //得到文章标题
+    public String addDocument(HttpServletRequest request) throws IOException {
         String title = request.getParameter("title");
-        //得到文章作者
+        if(StringUtils.isEmpty(title)) {
+            throw new RuntimeException("文章标题不能为空");
+        }
         String creator = request.getParameter("creator");
+        if(StringUtils.isEmpty(title)) {
+            throw new RuntimeException("文章作者不能为空");
+        }
+        String content = request.getParameter("content");
+        if(StringUtils.isEmpty(title)) {
+            throw new RuntimeException("文章内容不能为空");
+        }
+        String url = request.getParameter("url");
         //得到专栏标签
         String tags = request.getParameter("tags");
-        //得到文章内容
-        String content = request.getParameter("content");
-        String url = request.getParameter("url");
-
-
         Document document = new Document();
         document.setTitle(title);
         document.setContent(content);
         document.setCreator(creator);
         document.setUrl(url);
         document.setViewCount(0);
-        document.setGmtCreate(System.currentTimeMillis());
-        document.setGmtModified(System.currentTimeMillis());
-
-
         String token[] = tags.split(",");
         List<Tag> tagList = new ArrayList<>();
         for (String t:token){
@@ -185,7 +186,6 @@ public class AdminController {
             tagList.add(tag);
         }
         document.setTags(tagList);
-
         resourcesService.insertDocument(document);
         return "200";
     }
