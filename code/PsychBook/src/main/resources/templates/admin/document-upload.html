@@ -178,10 +178,9 @@
                                         <ul class="dropdown-menu dropdown-menu-right pullDown">
                                             <!--遍历标签-->
                                             <div v-for="tag in tags">
-                                                <b-dropdown-item @click="tagSelect(tag.id,tag.tagName)">{{tag.tagName}}</b-dropdown-item>
+                                                <li><a href="javascript:void(0);" @click="tagSelect(tag.id,tag.tagName)">{{tag.tagName}}</a></li>
                                             </div>
-
-                                            <b-dropdown-item data-toggle="modal" data-target="#myModal" @click="openModal">创建标签</b-dropdown-item>
+                                            <li><a href="javascript:void(0);" data-toggle="modal" data-target="#myModal" @click="openModal">创建标签</a></li>
                                         </ul>
                                         <!--<button type="button" class="btn btn-neutral" aria-haspopup="true" aria-expanded="false">-->
                                             <!--<a href="#" v-text="tagNames"></a>-->

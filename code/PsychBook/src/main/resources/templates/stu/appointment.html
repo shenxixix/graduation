@@ -116,7 +116,7 @@
                                         <ul class="dropdown-menu dropdown-menu-right pullDown">
                                             <!--遍历标签-->
                                             <div v-for="date in dates">
-                                                <b-dropdown-item @click="dateSelect(date)">{{date}}</b-dropdown-item>
+                                                <li><a href="javascript:void(0);" @click="dateSelect(date)">{{date}}</a></li>
                                             </div>
                                         </ul>
 
@@ -159,7 +159,7 @@
                                         <ul class="dropdown-menu dropdown-menu-right pullDown">
                                             <!--遍历时间段-->
                                             <div v-for="time in times">
-                                                <b-dropdown-item @click="timeSelect(time)">{{time}}</b-dropdown-item>
+                                                <li><a href="javascript:void(0);" @click="timeSelect(time)">{{time}}</a></li>
                                             </div>
                                         </ul>
 
