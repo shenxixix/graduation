@@ -43,7 +43,6 @@ public class ChatWebSocket {
     //当前发消息的人员编号
     private String userno = "";
 
-
     /**
      * 连接建立成功调用的方法
      *
@@ -58,7 +57,6 @@ public class ChatWebSocket {
         //System.out.println("有新连接加入！当前在线人数为" + getOnlineCount());
     }
 
-
     /**
      * 连接关闭调用的方法
      */
@@ -70,7 +68,6 @@ public class ChatWebSocket {
             //System.out.println("有一连接关闭！当前在线人数为" + getOnlineCount());
         }
     }
-
 
     /**
      * 收到客户端消息后调用的方法
@@ -84,7 +81,6 @@ public class ChatWebSocket {
         //给指定的人发消息
         sendToUser(message);
     }
-
 
     /**
      * 给指定的人发送消息
@@ -152,16 +148,13 @@ public class ChatWebSocket {
         //this.session.getAsyncRemote().sendText(message);
     }
 
-
     public static synchronized int getOnlineCount() {
         return onlineCount;
     }
 
-
     public static synchronized void addOnlineCount() {
         ChatWebSocket.onlineCount++;
     }
-
 
     public static synchronized void subOnlineCount() {
         ChatWebSocket.onlineCount--;

@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.shenxi.psych.entity.*;
 import com.shenxi.psych.service.*;
 import com.shenxi.psych.service.RedisService.UserRedisService;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -368,26 +369,34 @@ public class PatientController {
 
     @PostMapping(value = "/stu/postAppointment")
     public String postAppointment(HttpServletRequest request){
-        String stuId = request.getParameter("stuId");
+        String patientId = request.getParameter("patientId");
+        if(StringUtils.isEmpty(patientId))
+            throw new RuntimeException("咨询者不能为空");
         String doctorId = request.getParameter("doctorId");
+        if(StringUtils.isEmpty(patientId))
+            throw new RuntimeException("医生不能为空");
         String date = request.getParameter("dates2");
+        if(StringUtils.isEmpty(patientId))
+            throw new RuntimeException("日期不能为空");
         String time = request.getParameter("times2");
+        if(StringUtils.isEmpty(patientId))
+            throw new RuntimeException("时间不能为空");
         String content = request.getParameter("content");
-
+        if(StringUtils.isEmpty(patientId))
+            throw new RuntimeException("咨询内容不能为空");
         Appointment appointment = new Appointment();
-        appointment.setStuId(Integer.valueOf(stuId));
+        appointment.setStuId(Integer.valueOf(patientId));
         appointment.setDoctorId(Integer.valueOf(doctorId));
         appointment.setDates(date);
         appointment.setTimes(time);
         appointment.setState(0);
         appointment.setContent(content);
         appointment.setGmtCreate(System.currentTimeMillis());
-
         try{
             patientService.insertAppointment(appointment);
         }catch (Exception e){
-            logger.info("插入预约表失败！");
-            e.printStackTrace();
+            logger.info("插入预约表失败！", e);
+            throw new RuntimeException("预约失败");
         }
         return "200";
     }

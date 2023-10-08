@@ -246,7 +246,7 @@
                 content:"",
                 //注意vue中可以写thymeleaf的插值表达式
                 question_id:"",
-                student_id:[[${stuId}]],
+                patient_id:[[${stuId}]],
                 label:"",
                 tags:[],
                 msg:"",
@@ -270,7 +270,7 @@
                 this.dates = [[${dates}]];
                 this.doctor = [[${doctor}]];
                 console.log(this.doctor_id);
-                console.log(this.student_id);
+                console.log(this.patient_id);
                 this.times = [[${times}]];
                 _this = this;
                 await axios.get("/psych/question/getTags").then(res => {
@@ -301,8 +301,8 @@
                         console.log(this.dates2);
                         formdata.append("times2",this.times2);
                         console.log(this.times2);
-                        formdata.append("stuId",this.student_id);
-                        console.log(this.student_id);
+                        formdata.append("patientId",this.patient_id);
+                        console.log(this.patient_id);
                         formdata.append("content",this.content);
                         console.log(this.content);
 
