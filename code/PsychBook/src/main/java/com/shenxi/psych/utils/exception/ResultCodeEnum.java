@@ -16,8 +16,7 @@ public enum ResultCodeEnum {
     UPDATE_STU_STATE_IN_DB(false,206,"修改数据库咨询者在线状态错误"),
     UPDATE_STU_STATE_IN_REDIS(false,206,"Redis修改咨询者在线状态错误"),
     UPDATE_DOCTOR_STATE_IN_REDIS(false,207,"Redis修改心理医生在线状态错误"),
-    UPDATE_DOCTOR_STATE_IN_DB(false,207,"db修改心理医生在线状态错误"),
-    ;
+    UPDATE_DOCTOR_STATE_IN_DB(false,207,"db修改心理医生在线状态错误");
 
     // 响应是否成功
     private Boolean success;

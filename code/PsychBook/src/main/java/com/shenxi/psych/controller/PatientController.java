@@ -6,6 +6,8 @@ import com.github.pagehelper.PageInfo;
 import com.shenxi.psych.entity.*;
 import com.shenxi.psych.service.*;
 import com.shenxi.psych.service.RedisService.UserRedisService;
+import com.shenxi.psych.utils.exception.CMSException;
+import com.shenxi.psych.utils.exception.ResultCodeEnum;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -371,19 +373,19 @@ public class PatientController {
     public String postAppointment(HttpServletRequest request){
         String patientId = request.getParameter("patientId");
         if(StringUtils.isEmpty(patientId))
-            throw new RuntimeException("咨询者不能为空");
+            throw new CMSException(ResultCodeEnum.PARAM_ERROR.getCode(), "咨询者不能为空");
         String doctorId = request.getParameter("doctorId");
         if(StringUtils.isEmpty(patientId))
-            throw new RuntimeException("医生不能为空");
+            throw new CMSException(ResultCodeEnum.PARAM_ERROR.getCode(), "医生不能为空");
         String date = request.getParameter("dates2");
         if(StringUtils.isEmpty(patientId))
-            throw new RuntimeException("日期不能为空");
+            throw new CMSException(ResultCodeEnum.PARAM_ERROR.getCode(), "日期不能为空");
         String time = request.getParameter("times2");
         if(StringUtils.isEmpty(patientId))
-            throw new RuntimeException("时间不能为空");
+            throw new CMSException(ResultCodeEnum.PARAM_ERROR.getCode(), "时间不能为空");
         String content = request.getParameter("content");
         if(StringUtils.isEmpty(patientId))
-            throw new RuntimeException("咨询内容不能为空");
+            throw new CMSException(ResultCodeEnum.PARAM_ERROR.getCode(), "咨询内容不能为空");
         Appointment appointment = new Appointment();
         appointment.setStuId(Integer.valueOf(patientId));
         appointment.setDoctorId(Integer.valueOf(doctorId));

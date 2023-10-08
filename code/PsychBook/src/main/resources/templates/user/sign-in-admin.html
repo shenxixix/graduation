@@ -161,12 +161,12 @@
                     }
 
                     console.log(this.admin)
-                    if (!($.isEmptyObject(this.admin))) {
+                    if (!($.isEmptyObject(this.admin)) && this.admin.hasOwnProperty('id')) {
                         this.content = ""
 
                         location.href = "/psych/admin/toHomePage?name=" + this.name
                     }else {
-                        this.content = "用户名或密码错误"
+                        this.content = this.admin.message;
                     }
                 }
             }

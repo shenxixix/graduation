@@ -72,19 +72,19 @@ public class DoctorServiceImp implements DoctorService {
         String password = doctor.getPassword();
         String tel = doctor.getTel();
         if(StringUtils.isEmpty(username)) {
-            throw new RuntimeException("用户名不能为空");
+            throw new CMSException(ResultCodeEnum.PARAM_ERROR.getCode(), "用户名不能为空");
         }
         if(StringUtils.isEmpty(password)) {
-            throw new RuntimeException("密码不能为空");
+            throw new CMSException(ResultCodeEnum.PARAM_ERROR.getCode(),"密码不能为空");
         }
         if(StringUtils.isEmpty(tel)) {
-            throw new RuntimeException("电话号码不能为空");
+            throw new CMSException(ResultCodeEnum.PARAM_ERROR.getCode(),"电话号码不能为空");
         }
         if(doctorMapper.getDoctorByDoctorNumber(username) != null) {
-            throw new RuntimeException("该用户名已经存在");
+            throw new CMSException(ResultCodeEnum.PARAM_ERROR.getCode(),"该用户名已经存在");
         }
         if(doctorMapper.selectDoctorByTel(tel) != null) {
-            throw new RuntimeException("该手机号已经存在");
+            throw new CMSException(ResultCodeEnum.PARAM_ERROR.getCode(),"该手机号已经存在");
         }
         doctorMapper.insertDoctor(doctor);
     }
@@ -104,10 +104,10 @@ public class DoctorServiceImp implements DoctorService {
     public Doctor doctorChecked(String doctorNumber, String password) {
         Doctor doctor =doctorMapper.getDoctorByDoctorNumber(doctorNumber);
         if(doctor == null) {
-            throw new RuntimeException("用户不存在");
+            throw new CMSException(ResultCodeEnum.PARAM_ERROR.getCode(),"用户不存在");
         }
         if(doctor == null || !doctor.getPassword().equals(password)) {
-            throw new RuntimeException("验证码错误");
+            throw new CMSException(ResultCodeEnum.PARAM_ERROR.getCode(),"密码错误");
         }
         logger.info("get doctor is->{}", JSON.toJSON(doctor));
         // 记录登录日志
@@ -129,10 +129,10 @@ public class DoctorServiceImp implements DoctorService {
     public Doctor doctorAuthcode(String tel, String authcode) {
         Doctor doctor = doctorMapper.selectDoctorByTel(tel);
         if(doctor == null) {
-            throw new RuntimeException("用户不存在");
+            throw new CMSException(ResultCodeEnum.PARAM_ERROR.getCode(), "用户不存在");
         }
         if(doctor == null || !authcode.equals(getCodeByTel(tel))) {
-            throw new RuntimeException("验证码错误");
+            throw new CMSException(ResultCodeEnum.PARAM_ERROR.getCode(), "验证码错误");
         }
         logger.info("get doctor is->{}", JSON.toJSON(doctor));
         Login login = new Login();

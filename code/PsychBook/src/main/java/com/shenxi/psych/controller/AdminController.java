@@ -7,6 +7,8 @@ import com.shenxi.psych.service.AdminService;
 import com.shenxi.psych.service.DoctorService;
 import com.shenxi.psych.service.ResourcesService;
 import com.shenxi.psych.service.PatientService;
+import com.shenxi.psych.utils.exception.CMSException;
+import com.shenxi.psych.utils.exception.ResultCodeEnum;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,7 +63,11 @@ public class AdminController {
     @ResponseBody
     public Admin AdminChecked(Admin admin){
         logger.info("admin的信息->{}", JSON.toJSON(admin));
-        return adminService.checkAdmin(admin);
+        Admin a = adminService.checkAdmin(admin);
+        if(a == null) {
+            throw new CMSException(ResultCodeEnum.PARAM_ERROR.getCode(),"用户名或密码错误");
+        }
+        return a;
     }
 
     /**
@@ -159,15 +165,15 @@ public class AdminController {
     public String addDocument(HttpServletRequest request) throws IOException {
         String title = request.getParameter("title");
         if(StringUtils.isEmpty(title)) {
-            throw new RuntimeException("文章标题不能为空");
+            throw new CMSException(ResultCodeEnum.PARAM_ERROR.getCode(), "文章标题不能为空");
         }
         String creator = request.getParameter("creator");
         if(StringUtils.isEmpty(title)) {
-            throw new RuntimeException("文章作者不能为空");
+            throw new CMSException(ResultCodeEnum.PARAM_ERROR.getCode(), "文章作者不能为空");
         }
         String content = request.getParameter("content");
         if(StringUtils.isEmpty(title)) {
-            throw new RuntimeException("文章内容不能为空");
+            throw new CMSException(ResultCodeEnum.PARAM_ERROR.getCode(),"文章内容不能为空");
         }
         String url = request.getParameter("url");
         //得到专栏标签

@@ -48,11 +48,11 @@ public class StudentServiceImp implements PatientService {
         String stuNumber = patient.getStuNumber();
         Integer accountId = patientMapper.selectIdByStuNumber(stuNumber);
         if(accountId != null) {
-            throw new RuntimeException("该编号已经注册，请更换");
+            throw new CMSException(ResultCodeEnum.PARAM_ERROR.getCode(), "该编号已经注册，请更换");
         }
         Patient pt = patientMapper.selectStuByTel(patient.getTel());
         if(pt != null){
-            throw new RuntimeException("该电话号码已经注册，请更换");
+            throw new CMSException(ResultCodeEnum.PARAM_ERROR.getCode(), "该电话号码已经注册，请更换");
         }
         patientMapper.insertStu(patient);
 
@@ -70,10 +70,10 @@ public class StudentServiceImp implements PatientService {
     public Patient stuChecked(String stuNumber, String password) {
         Patient patient = patientMapper.selectStuByStuNumber(stuNumber);
         if(patient == null) {
-            throw new RuntimeException("用户不存在");
+            throw new CMSException(ResultCodeEnum.PARAM_ERROR.getCode(), "用户不存在");
         }
         if(!patient.getPassword().equals(password)) {
-            throw new RuntimeException("用户密码错误");
+            throw new CMSException(ResultCodeEnum.PARAM_ERROR.getCode(), "用户密码错误");
         }
         logger.info("get patient is->{}", JSON.toJSON(patient));
         // TODO 新增登录信息表
@@ -90,10 +90,10 @@ public class StudentServiceImp implements PatientService {
     public Patient stuAuthcode(String tel, String authcode) {
         Patient patient = patientMapper.selectStuByTel(tel);
         if(patient == null) {
-            throw new RuntimeException("用户不存在");
+            throw new CMSException(ResultCodeEnum.PARAM_ERROR.getCode(), "用户不存在");
         }
         if(patient == null || !authcode.equals(getCodeByTel(tel))) {
-            throw new RuntimeException("验证码错误");
+            throw new CMSException(ResultCodeEnum.PARAM_ERROR.getCode(), "验证码错误");
         }
         logger.info("get student is->{}", JSON.toJSON(patient));
         return patient;

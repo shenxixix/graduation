@@ -39,11 +39,11 @@ var app = new Vue({
                         console.log(err)
                     }
                     console.log(this.patient)
-                    if (!($.isEmptyObject(this.patient))) {
+                    if (!($.isEmptyObject(this.patient))  && this.patient.hasOwnProperty('id') ) {
                         this.content = ""
                         location.href = "/psych/stu/toHomePage?stuNumber=" + this.patient.stuNumber
                     } else {
-                        this.content = "用户名或密码错误"
+                        this.content = this.patient.message;
                     }
                 }
             } else {
@@ -67,11 +67,11 @@ var app = new Vue({
                         console.log(err)
                     }
                     console.log(this.patient)
-                    if (!($.isEmptyObject(this.patient)) && this.patient.stuNumber) {
+                    if (!($.isEmptyObject(this.patient))  && this.patient.hasOwnProperty('id') ) {
                         this.content = ""
                         location.href = "/psych/stu/toHomePage?stuNumber=" + this.patient.stuNumber
                     } else {
-                        this.content = "电话号码或验证码错误"
+                        this.content = this.patient.message;
                     }
                 }
             }
