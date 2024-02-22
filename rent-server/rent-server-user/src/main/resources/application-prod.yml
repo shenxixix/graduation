@@ -1,0 +1,94 @@
+server:
+  http2:
+    enabled: true
+  port: 9996
+  servlet:
+    context-path: /rent-server-user
+
+logging:
+  path: logs
+  config: classpath:logback.xml
+  level:
+    com.netflix.discovery: ERROR
+
+spring:
+  aop:
+    proxy-target-class: true
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://pgm-8vbyy75d2otao76g4o.pgsql.zhangbei.rds.aliyuncs.com:5432/hwrent
+    sql-script-encoding: utf-8
+    password: cqgcgl
+    username: cqgcgl
+  thymeleaf:
+    cache: false
+    encoding: utf-8
+    mode: HTML5
+    suffix: .html
+    prefix: classpath:/templates/
+  cloud:
+    inetutils:
+      ignored-interfaces:
+management:
+  security:
+    enabled: false
+
+eureka:
+  client:
+    # 实例是否使用同一zone里的eureka服务器
+    prefer-same-zone-eureka: true
+    region: hw-sys
+    service-url:
+      zone1: http://192.168.18.117:28761/eureka/
+    availability-zones:
+      hw-sys: zone1
+    # 从eureka服务器注册表中获取注册信息的时间间隔(s)
+    registry-fetch-interval-seconds: 15
+    # 最初复制实例信息到eureka服务器所需的时间(s)
+    initial-instance-info-replication-interval-seconds: 10
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}/${spring.application.name}
+    metadataMap.zone: zone1
+    # eureka客户需要多长时间发送心跳给eureka服务器
+    lease-renewal-interval-in-seconds: 30
+    # eureka服务器在接收到实例的最后一次发出的心跳后，需要等待多久才可以将此实例删除
+    lease-expiration-duration-in-seconds: 90
+
+zoom:
+  #批量调用zoom-data的配置
+  data:
+    #zoom-data部署的服务器数量
+    machineNums: 1
+    #多少个设备号一组调用一次zoom-data服务
+    groupSize: 40
+  #线程池配置 zoom-common-threadpool.jar
+  threadpool:
+    #执行并行任务时，等待多久时间超时
+    timeOut: 60
+    #队列大小
+    queueSize: 1000
+    #核心线程大小
+    coreThreadNum: 100
+    #线程池线程大小
+    maxPoolSize: 200
+    #并行执行每组大小
+    groupSize: 20
+
+  #redis配置
+  # redis:
+  #  password: 123456
+  #  url: 192.168.18.105:7001,192.168.18.105:7002,192.168.18.105:7003,192.168.18.105:7004,192.168.18.105:7005,192.168.18.105:7006
+
+# 人脸识别认证
+face:
+  host: https://smlopenapi.esign.cn
+  project_id: 7438932682
+  project_scert: 1eeb1298411f47a92dab8eb010116b19
+  notifyUrl: http://47.92.132.162:10050/hw-car-user/rider/faceAuthCallback
+
+#redis配置
+redis:
+  password: 123456
+  url: 192.168.18.105:7001,192.168.18.105:7002,192.168.18.105:7003,192.168.18.105:7004,192.168.18.105:7005,192.168.18.105:7006
